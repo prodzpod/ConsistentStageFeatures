@@ -4,7 +4,6 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using RoR2;
-using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +11,7 @@ using UnityEngine.Networking;
 using RoR2.Navigation;
 using UnityEngine.AddressableAssets;
 
-namespace LimitedInteractables
+namespace ConsistentStageFeatures
 {
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
     [BepInDependency(softdepBulwarksHaunt, BepInDependency.DependencyFlags.SoftDependency)]
@@ -25,7 +24,7 @@ namespace LimitedInteractables
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "ConsistentStageFeatures";
-        public const string PluginVersion = "1.0.0";
+        public const string PluginVersion = "1.0.2";
         public const string softdepBulwarksHaunt = "com.themysticsword.bulwarkshaunt";
         public const string softdepAetherium = "com.KomradeSpectre.Aetherium";
         public const string softdepForgottenRelics = "PlasmaCore.ForgottenRelics";
@@ -53,8 +52,10 @@ namespace LimitedInteractables
         public static ConfigEntry<bool> RemoveRandomGoldShrine;
         public static ConfigEntry<bool> SpecialChestOnPools;
         public static ConfigEntry<bool> HankOffersDrink;
+        public static ConfigEntry<bool> REXOnStage4;
         public static ConfigEntry<bool> ShrineRepairOnStage5;
         public static ConfigEntry<bool> RemoveRandomShrineRepair;
+        public static ConfigEntry<bool> SageShrineOnMeadow;
         public static ConfigEntry<bool> SageShrineOnSatellite;
         public static ConfigEntry<bool> RemoveRandomSageShrine;
         public static ConfigEntry<bool> BulwarkSwordOnSatellite;
@@ -71,6 +72,7 @@ namespace LimitedInteractables
         public static ConfigEntry<bool> VieldsNoLoot;
 
         public static bool hanked = false;
+        private ConfigEntry<bool> MountainShrinesInSirens;
 
         public void Awake()
         {
@@ -157,7 +159,19 @@ namespace LimitedInteractables
             HankOffersDrink = Config.Bind("Stage 3", "Hank Offers Drink", true, "Talking to Hank will result in a random drink.");
             if (Mods(softdepFogboundLagoon)) HandleHank();
 
-            // Siren's Call - Vanilla (AWU)
+            REXOnStage4 = Config.Bind("Stage 4", "REX on Stage 4", true, "Guaranteed Fuel Array usage");
+            if (REXOnStage4.Value)
+            {
+                GameObject rex = LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/TreebotUnlockInteractable");
+                SpawnGuaranteed("rootjungle", rex, new Vector3(-134.6807f, 76.389f, -240.2231f), new Vector3(19.8134f, 35.7062f, 2.9408f));
+                SpawnGuaranteed("shipgraveyard", rex, new Vector3(188.8096f, 95.1875f, -93.8135f), new Vector3(349.2507f, 204.2245f, 8.077f));
+            }
+            MountainShrinesInSirens = Config.Bind("Stage 4", "Mountain Shrines on Siren`s Call", true, "lol");
+            if (MountainShrinesInSirens.Value)
+            {
+                SpawnGuaranteed("shipgraveyard", "SpawnCards/InteractableSpawnCard/iscShrineBoss", new Vector3(-112.4888f, -28.4255f, -24.0116f), new Vector3(4.9546f, 195.4476f, 5.7509f));
+                SpawnGuaranteed("shipgraveyard", "SpawnCards/InteractableSpawnCard/iscShrineBoss", new Vector3(-90.4575f, -30.8145f, -52.1998f), new Vector3(353.2658f, 286.8359f, 352.891f));
+            }
             // Sundered Grove - Vanilla (Cool legendary chest gimmick)
             // Abyssal Depths - Direseeker (Direseeker)
 
@@ -165,12 +179,14 @@ namespace LimitedInteractables
             RemoveRandomShrineRepair = Config.Bind("Stage 5", "Remove Random Shrine of Repair Spawns", false, "only the fixed spawn exists");
             if (Mods(softdepShrineOfRepair)) HandleShrineOfRepair();
             // Sky Meadow - Vanilla (Artifact Terminal)
+            SageShrineOnMeadow = Config.Bind("Stage 5", "Sage`s Shrine on Sky Meadow", false, "shmrez is weird fr fr");
             SageShrineOnSatellite = Config.Bind("Stage 5", "Sage`s Shrine on Slumbering Satellite", true, "makes it fixed");
             RemoveRandomSageShrine = Config.Bind("Stage 5", "Remove Random Sage`s Shrine Spawns", true, "only the fixed spawn exists");
             if (Mods(softdepForgottenRelics)) checkSageShrine();
             void checkSageShrine()
             {
-                if (ShrineRepairOnStage5.Value) SpawnGuaranteed("slumberingsatellite", FRCSharp.VF2ContentPackProvider.iscSagesShrine, new Vector3(70.5048f, 108.5265f, -323.2408f), new Vector3(11.9998f, 144.8941f, 337.7272f));
+                if (SageShrineOnMeadow.Value) SpawnGuaranteed("skymeadow", FRCSharp.VF2ContentPackProvider.iscSagesShrine, new Vector3(-146.0359f, 144.0454f, 181.8587f), new Vector3(322.3633f, 139.1794f, 21.4546f));
+                if (SageShrineOnSatellite.Value) SpawnGuaranteed("slumberingsatellite", FRCSharp.VF2ContentPackProvider.iscSagesShrine, new Vector3(70.5048f, 108.5265f, -323.2408f), new Vector3(11.9998f, 144.8941f, 337.7272f));
                 if (RemoveRandomSageShrine.Value) FRCSharp.VF2ContentPackProvider.iscSagesShrine.maxSpawnsPerStage = 0;
             };
             BulwarkSwordOnSatellite = Config.Bind("Stage 5", "Bulwark Sword on Slumbering Satellite", true, "haunted is no longer rng");
