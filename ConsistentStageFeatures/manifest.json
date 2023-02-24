@@ -1,0 +1,10 @@
+{
+	"name": "ConsistentStageFeatures",
+	"version_number": "1.0.0",
+	"website_url": "https://github.com/prodzpod/ConsistentStageFeatures",
+	"description": "Tweaks to various stages that makes runs more consistent and knowledge-based.",
+	"dependencies": [
+		"bbepis-BepInExPack-5.4.2103",
+		"RiskofThunder-HookGenPatcher-1.2.3"
+	]
+}
