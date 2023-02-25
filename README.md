@@ -160,6 +160,7 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 </details>
 
 ## Changelog
+- 1.0.5: shrine of the woods cost scaling fix
 - 1.0.4: Buff brazier cost
 - 1.0.3: Newt statue
 - 1.0.2: Added sky meadow sages, sirens tweaks, rex on stage 4

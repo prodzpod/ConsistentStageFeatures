@@ -24,7 +24,7 @@ namespace ConsistentStageFeatures
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "ConsistentStageFeatures";
-        public const string PluginVersion = "1.0.4";
+        public const string PluginVersion = "1.0.5";
         public const string softdepAetherium = "com.KomradeSpectre.Aetherium";
         public const string softdepBulwarksHaunt = "com.themysticsword.bulwarkshaunt";
         public const string softdepFogboundLagoon = "JaceDaDorito.FBLStage";
@@ -436,6 +436,11 @@ namespace ConsistentStageFeatures
                 DirectorPlacementRule directorPlacementRule = new DirectorPlacementRule() { placementMode = DirectorPlacementRule.PlacementMode.Direct };
                 GameObject spawnedInstance = spawnCard.DoSpawn(pos, Quaternion.Euler(rot), new DirectorSpawnRequest(spawnCard, directorPlacementRule, Run.instance.runRNG)).spawnedInstance;
                 spawnedInstance.transform.eulerAngles = rot;
+                if (spawnedInstance)
+                {
+                    PurchaseInteraction component = spawnedInstance.GetComponent<PurchaseInteraction>();
+                    if (component && component.costType == CostTypeIndex.Money) component.Networkcost = Run.instance.GetDifficultyScaledCost(component.cost);
+                }
                 NetworkServer.Spawn(spawnedInstance);
             };
             Log.LogDebug($"Added a Guaranteed Spawn of {spawnCard.prefab.name} at {scene}");
@@ -448,6 +453,11 @@ namespace ConsistentStageFeatures
                 DirectorPlacementRule directorPlacementRule = new DirectorPlacementRule() { placementMode = DirectorPlacementRule.PlacementMode.Direct };
                 GameObject spawnedInstance = Instantiate(obj, pos, Quaternion.Euler(rot));
                 spawnedInstance.transform.eulerAngles = rot;
+                if (spawnedInstance)
+                {
+                    PurchaseInteraction component = spawnedInstance.GetComponent<PurchaseInteraction>();
+                    if (component && component.costType == CostTypeIndex.Money) component.Networkcost = Run.instance.GetDifficultyScaledCost(component.cost);
+                }
                 NetworkServer.Spawn(spawnedInstance);
             };
             Log.LogDebug($"Added a Guaranteed Spawn of {obj.name} at {scene}");
