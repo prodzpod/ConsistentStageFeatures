@@ -9,6 +9,8 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 - Time Scale Config: Enable/Disables run time flow per stage. By default, Gilded Coast and [Forgotten Haven](https://thunderstore.io/package/PlasmaCore3/Forgotten_Relics/) gets timestop disabled.
 - Stage Chance Config: Ability to set likelihood of each stage appearing. By default, triples chance of Sky Meadow to make artifact grinding better with [Forgotten Relics](https://thunderstore.io/package/PlasmaCore3/Forgotten_Relics/).
 - Max Void Seeds Config: Ability to set maximum number of void seeds per stage. Set to 1 by default, vanilla is 3.
+- Guaranteed Newt Statue: One newt statue will spawn at **random** location in every stage. fixes Distant Roost and Rallypoint Delta specifically.
+![Image](https://media.discordapp.net/attachments/515678914316861451/1078836756390105189/20230225093120_1.jpg)
 
 ## Stage 1
 <details><summary>Details w/ Screenshot (Spoilers!)</summary>
@@ -95,7 +97,7 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 - Guaranteed [Shrine of Repair](https://thunderstore.io/package/viliger/ShrineOfRepair/): At least one Shrine of Repair will always spawn in a **random** location. Ability to turn off natural spawn is also configurable.
 ![Image](https://media.discordapp.net/attachments/515678914316861451/1078589394002399302/20230224164423_1.jpg)
 - **Default Off:** Sages' Shrine will spawn at **fixed** location in Sky Meadow.
-![Image]()
+![Image](https://media.discordapp.net/attachments/515678914316861451/1078681754493259837/20230224230556_1.jpg)
 - Sages' Shrine will spawn at **fixed** location in [Slumbering Satellite](https://thunderstore.io/package/PlasmaCore3/Forgotten_Relics/). **Sages' Shrines will no longer spawn randomly by default.**
 ![Image](https://media.discordapp.net/attachments/515678914316861451/1078589394660904980/20230224164601_1.jpg)
 - [Crystalline Blade](https://thunderstore.io/package/TheMysticSword/BulwarksHaunt/) will spawn at **fixed** location in [Slumbering Satellite](https://thunderstore.io/package/PlasmaCore3/Forgotten_Relics/).
@@ -156,6 +158,7 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 </details>
 
 ## Changelog
+- 1.0.3: Newt statue
 - 1.0.2: Added sky meadow sages, sirens tweaks, rex on stage 4
 - 1.0.1: README fix :aaaaaaaaaaaaaaaaa:
 - 1.0.0: Initial Release
