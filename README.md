@@ -16,6 +16,8 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 <details><summary>Details w/ Screenshot (Spoilers!)</summary>
 <p>
 
+- Buff braziers cost twice as more by default.
+![Image](https://media.discordapp.net/attachments/515678914316861451/1079082417513574531/20230226014707_1.jpg)
 - Guaranteed [Buff Brazier](https://thunderstore.io/package/KomradeSpectre/Aetherium/): At least one Buff Brazier will always spawn in a **random** location. **Buff Braziers will no longer spawn randomly by default.**
 ![Image](https://media.discordapp.net/attachments/515678914316861451/1078589327090651166/20230224153644_1.jpg)
 
@@ -158,6 +160,7 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 </details>
 
 ## Changelog
+- 1.0.4: Buff brazier cost
 - 1.0.3: Newt statue
 - 1.0.2: Added sky meadow sages, sirens tweaks, rex on stage 4
 - 1.0.1: README fix :aaaaaaaaaaaaaaaaa:

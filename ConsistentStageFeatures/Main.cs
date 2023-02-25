@@ -24,7 +24,7 @@ namespace ConsistentStageFeatures
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "ConsistentStageFeatures";
-        public const string PluginVersion = "1.0.3";
+        public const string PluginVersion = "1.0.4";
         public const string softdepAetherium = "com.KomradeSpectre.Aetherium";
         public const string softdepBulwarksHaunt = "com.themysticsword.bulwarkshaunt";
         public const string softdepFogboundLagoon = "JaceDaDorito.FBLStage";
@@ -40,6 +40,7 @@ namespace ConsistentStageFeatures
         public static ConfigEntry<int> MaxVoidSeeds;
         public static ConfigEntry<bool> GuaranteedNewt;
         public static ConfigEntry<bool> BuffBrazierOnStage1;
+        public static ConfigEntry<int> BuffBrazierCost;
         public static ConfigEntry<bool> RemoveRandomBuffBrazier;
         public static ConfigEntry<bool> RedPrinterOnSiphoned;
         public static ConfigEntry<bool> GreenPrinterOnPlains;
@@ -88,6 +89,7 @@ namespace ConsistentStageFeatures
             GuaranteedNewt = Config.Bind("General", "Guaranteed Newt Altar", true, "Guarantees 1 Newt shrine every stage.");
 
             BuffBrazierOnStage1 = Config.Bind("Stage 1", "Buff Brazier on Stage 1", true, "Guaranteed Buff Brazier on stage 1.");
+            BuffBrazierCost = Config.Bind("Stage 1", "Buff Brazier Cost", 50, "Buff brazier cost, scales with time.");
             RemoveRandomBuffBrazier = Config.Bind("Stage 1", "Remove Random Buff Brazier Spawns", true, "only the fixed spawn exists");
             RedPrinterOnSiphoned = Config.Bind("Stage 1", "Red Printer on Siphoned Forest", false, "make sure to balance printer before this");
             GreenPrinterOnPlains = Config.Bind("Stage 1", "Green Printer on Golem Plains", false, "make sure to balance printer before this");
@@ -138,7 +140,8 @@ namespace ConsistentStageFeatures
             if (Mods(softdepAetherium)) checkBuffBrazier();
             void checkBuffBrazier()
             {
-                if (Aetherium.Interactables.BuffBrazier.InteractableSpawnCard == null) return; 
+                if (Aetherium.Interactables.BuffBrazier.InteractableSpawnCard == null) return;
+                if (BuffBrazierCost.Value != 25) Aetherium.Interactables.BuffBrazier.InteractableBodyModelPrefab.GetComponent<PurchaseInteraction>().cost = BuffBrazierCost.Value;
                 if (BuffBrazierOnStage1.Value)
                 {
                     foreach (var scene in new string[] { "golemplains", "golemplains2", "blackbeach", "blackbeach2", "snowyforest"/* , "quasitemporalobservatory" */ })
@@ -163,8 +166,8 @@ namespace ConsistentStageFeatures
 
             if (LunarBudOnStage2.Value)
             {
-                SpawnGuaranteed("goolake", "SpawnCards/InteractableSpawnCard/iscLunarChest", new Vector3(285.1561f, -61.79442f, -193.2947f));
-                SpawnGuaranteed("ancientloft", "SpawnCards/InteractableSpawnCard/iscLunarChest", new Vector3(-70.1913f, 81.07519f, 221.0971f));
+                SpawnGuaranteed("goolake", "SpawnCards/InteractableSpawnCard/iscLunarChest", new Vector3(285.1561f, -62.09442f, -193.2947f));
+                SpawnGuaranteed("ancientloft", "SpawnCards/InteractableSpawnCard/iscLunarChest", new Vector3(-70.1913f, 80.87519f, 221.0971f));
                 SpawnGuaranteed("foggyswamp", "SpawnCards/InteractableSpawnCard/iscLunarChest", new Vector3(-121.8996f, -126.0044f, -235.4447f));
                 if (Mods(softdepForgottenRelics)) SpawnGuaranteed("drybasin", "SpawnCards/InteractableSpawnCard/iscLunarChest", new Vector3(-228.2513f, 75.6862f, -86.5036f));
             }
