@@ -6,7 +6,7 @@ This mod guarantees specific interactables in various stages (like AWU) that you
 Entry listed as **Default Off** must be turned on through config to enable, and Entry listed as **Other Mod** is quite literally what other mod does; It is merely there to explain the other changes this mod makes and to recommend if you want more stage features.
 
 ## General
-- Time Scale Config: Enable/Disables run time flow per stage. By default, Gilded Coast and [Forgotten Haven](https://thunderstore.io/package/PlasmaCore3/Forgotten_Relics/) gets timestop disabled.
+- Time Scale Config: Enable/Disables run time flow per stage. By default, [Forgotten Haven](https://thunderstore.io/package/PlasmaCore3/Forgotten_Relics/) gets timestop disabled.
 - Stage Chance Config: Ability to set likelihood of each stage appearing. By default, triples chance of Sky Meadow to make artifact grinding better with [Forgotten Relics](https://thunderstore.io/package/PlasmaCore3/Forgotten_Relics/).
 - Max Void Seeds Config: Ability to set maximum number of void seeds per stage. Set to 1 by default, vanilla is 3.
 - Guaranteed Newt Statue: One newt statue will spawn at **random** location in every stage. fixes Distant Roost and Rallypoint Delta specifically.
@@ -16,7 +16,7 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 <details><summary>Details w/ Screenshot (Spoilers!)</summary>
 <p>
 
-- Buff braziers cost twice as more by default.
+- Buff braziers cost twice as much by default.
 ![Image](https://media.discordapp.net/attachments/515678914316861451/1079082417513574531/20230226014707_1.jpg)
 - Guaranteed [Buff Brazier](https://thunderstore.io/package/KomradeSpectre/Aetherium/): At least one Buff Brazier will always spawn in a **random** location. **Buff Braziers will no longer spawn randomly by default.**
 ![Image](https://media.discordapp.net/attachments/515678914316861451/1078589327090651166/20230224153644_1.jpg)
@@ -143,6 +143,8 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 - Combat and Blood Shrines will spawn at **fixed** position in Gilded Coast.
 ![Image](https://media.discordapp.net/attachments/515678914316861451/1078589428915765308/20230224165609_1.jpg)
 ![Image](https://media.discordapp.net/attachments/515678914316861451/1078589429234548747/20230224165751_1.jpg)
+- Gilded Coast will spawn 2 less chests. (Default is 4, configurable)
+![Image](https://media.discordapp.net/attachments/515678821408571392/1081475170155384862/20230304161548_1.jpg)
 - Whenever you purchase a Radio Scanner or deposit a Fuel Cell, Radar Scanner's effect will trigger in [Forgotten Haven](https://thunderstore.io/package/PlasmaCore3/Forgotten_Relics/).
 ![Image](https://media.discordapp.net/attachments/515678914316861451/1078589429502980107/20230224165949_1.jpg)
 - **Other Mod** [KannasQualityofLife](https://thunderstore.io/package/SylmarDev/KannasQualityofLife/): Scrapper will spawn at **fixed** position in Bazaar Between Time.
@@ -160,6 +162,8 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 </details>
 
 ## Changelog
+- 1.0.7: Better loop calculation
+- 1.0.6: gilded coast timestop, chest config
 - 1.0.5: shrine of the woods cost scaling fix
 - 1.0.4: Buff brazier cost
 - 1.0.3: Newt statue

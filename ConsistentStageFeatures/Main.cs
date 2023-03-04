@@ -24,13 +24,13 @@ namespace ConsistentStageFeatures
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "ConsistentStageFeatures";
-        public const string PluginVersion = "1.0.5";
+        public const string PluginVersion = "1.0.7";
         public const string softdepAetherium = "com.KomradeSpectre.Aetherium";
         public const string softdepBulwarksHaunt = "com.themysticsword.bulwarkshaunt";
         public const string softdepFogboundLagoon = "JaceDaDorito.FBLStage";
         public const string softdepForgottenRelics = "PlasmaCore.ForgottenRelics";
         public const string softdepShrineOfRepair = "com.Viliger.ShrineOfRepair";
-        // public const string softdepQuasitemporalObservatory = "prodzpod.SuffersOnThunderkit";
+        // public const string softdepQueriersObservatory = "prodzpod.SuffersFromThunderkit";
         public static ManualLogSource Log;
         public static Harmony Harmony;
         public static PluginInfo pluginInfo;
@@ -68,6 +68,7 @@ namespace ConsistentStageFeatures
         public static ConfigEntry<bool> VieldsOnStage7;
         public static ConfigEntry<bool> LocusOnStage10;
         public static ConfigEntry<int> GoldShrineCost;
+        public static ConfigEntry<int> GoldenCoastChests;
         public static ConfigEntry<bool> GoldenCoastCombatShrine;
         public static ConfigEntry<bool> FHRadarScannerEffect;
         public static ConfigEntry<bool> HauntedWoodShrine;
@@ -83,7 +84,7 @@ namespace ConsistentStageFeatures
             Log = Logger;
             Config = new ConfigFile(System.IO.Path.Combine(Paths.ConfigPath, PluginGUID + ".cfg"), true);
 
-            TimescaleOverwrite = Config.Bind("General", "Timescale Unlocks", "goldshores, forgottenhaven", "List of scenes and run time, separated by commas. By default, disables time stop for FH and Golden Coast.");
+            TimescaleOverwrite = Config.Bind("General", "Timescale Unlocks", "forgottenhaven", "List of scenes and run time, separated by commas. By default, disables time stop for FH.");
             StageChances = Config.Bind("General", "Stage Chances", "skymeadow - 3", "List of scenes and chance weight, separated by commas. by default makes sky meadow 3 times as likely so artifact grinding isnt godawful");
             MaxVoidSeeds = Config.Bind("General", "Max Void Seeds", 1, "Number of Void Seeds that can be spawned at a single stage. Default is 3.");
             GuaranteedNewt = Config.Bind("General", "Guaranteed Newt Altar", true, "Guarantees 1 Newt shrine every stage.");
@@ -94,7 +95,7 @@ namespace ConsistentStageFeatures
             RedPrinterOnSiphoned = Config.Bind("Stage 1", "Red Printer on Siphoned Forest", false, "make sure to balance printer before this");
             GreenPrinterOnPlains = Config.Bind("Stage 1", "Green Printer on Golem Plains", false, "make sure to balance printer before this");
             YellowPrinterOnRoost = Config.Bind("Stage 1", "Yellow Printer on Distant Roost", false, "make sure to balance printer before this");
-            //  OrderShrineOnObservatory = Config.Bind("Stage 1", "Shrine of Order on Quasitemporal Observatory", true, "hehe");
+            //  OrderShrineOnObservatory = Config.Bind("Stage 1", "Shrine of Order on Queriers Observatory", true, "hehe");
             LunarBudOnStage2 = Config.Bind("Stage 2", "Lunar bud on Stage 2", true, "Guaranteed Lunar bud on stage 2.");
             RemoveRandomLunarBud = Config.Bind("Stage 2", "Remove Random Lunar Bud Spawns", false, "only the fixed spawn exists");
             AqueductButtonNoRelease = Config.Bind("Stage 2", "Abandoned Aqueduct Pressure Plate Stays Pressed", false, "set to true when you're using difficulty mods, for solo players");
@@ -120,6 +121,7 @@ namespace ConsistentStageFeatures
             LocusOnStage10 = Config.Bind("Looping", "Void Portal on Stage 10", true, "Guaranteed Void Portal on stage 10.");
 
             GoldShrineCost = Config.Bind("Hidden Realm", "Altar of Gold Cost", 100, "Scales with time, vanilla is 200 (8 chests)");
+            GoldenCoastChests = Config.Bind("Hidden Realm", "Altar of Gold Chests", 2, "Max: 4");
             GoldenCoastCombatShrine = Config.Bind("Hidden Realm", "Guaranteed Combat Shrines in Golden Coast", true, "money printer");
             FHRadarScannerEffect = Config.Bind("Hidden Realm", "Forgotten Haven Log and Cell Radar Scanner effect", true, "The purchasable logbook entry & putting in cells in the central portal triggers a Radar Scanner effect around it.");
             HauntedWoodShrine = Config.Bind("Hidden Realm", "Shrine of the Woods on Bulwark`s Haunt", true, "No regen?");
@@ -142,11 +144,7 @@ namespace ConsistentStageFeatures
             {
                 if (Aetherium.Interactables.BuffBrazier.InteractableSpawnCard == null) return;
                 if (BuffBrazierCost.Value != 25) Aetherium.Interactables.BuffBrazier.InteractableBodyModelPrefab.GetComponent<PurchaseInteraction>().cost = BuffBrazierCost.Value;
-                if (BuffBrazierOnStage1.Value)
-                {
-                    foreach (var scene in new string[] { "golemplains", "golemplains2", "blackbeach", "blackbeach2", "snowyforest"/* , "quasitemporalobservatory" */ })
-                        SpawnRandomly(scene, Aetherium.Interactables.BuffBrazier.InteractableSpawnCard);
-                }
+                if (BuffBrazierOnStage1.Value) SpawnRandomly(1, Aetherium.Interactables.BuffBrazier.InteractableSpawnCard);
                 if (RemoveRandomBuffBrazier.Value) Aetherium.Interactables.BuffBrazier.InteractableSpawnCard.maxSpawnsPerStage = 0;
             }
             if (RedPrinterOnSiphoned.Value) SpawnGuaranteed("snowyforest", "SpawnCards/InteractableSpawnCard/iscDuplicatorMilitary", new Vector3(-65.7508f, 80.6369f, -186.9797f), new Vector3(5.6833f, 33.3465f, 2.9875f));
@@ -160,8 +158,8 @@ namespace ConsistentStageFeatures
                 SpawnGuaranteed("blackbeach", "SpawnCards/InteractableSpawnCard/iscDuplicatorWild", new Vector3(203.9892f, -122.2774f, -105.9803f), new Vector3(45.3964f, 71.6722f, 7.0832f));
                 SpawnGuaranteed("blackbeach2", "SpawnCards/InteractableSpawnCard/iscDuplicatorWild", new Vector3(-137.3705f, 46.7941f, -97.3107f), new Vector3(15.839f, 115.0119f, 10.6805f));
             }
-            // if (Mods(softdepQuasitemporalObservatory)) {
-            //  if (OrderShrineOnObservatory.Value) SpawnGuaranteed("quasitemporalobservatory", "", new Vector3(), new Vector3());
+            // if (Mods(softdepQueriersObservatory)) {
+            //  if (OrderShrineOnObservatory.Value) SpawnGuaranteed("Queriersobservatory", "", new Vector3(), new Vector3());
             // }
 
             if (LunarBudOnStage2.Value)
@@ -180,10 +178,7 @@ namespace ConsistentStageFeatures
             if (GoldShrineOnStage3.Value)
             {
                 LegacyResourcesAPI.Load<InteractableSpawnCard>("SpawnCards/InteractableSpawnCard/iscShrineGoldshoresAccess").maxSpawnsPerStage = 1;
-                SpawnRandomly("frozenwall", "SpawnCards/InteractableSpawnCard/iscShrineGoldshoresAccess");
-                SpawnRandomly("wispgraveyard", "SpawnCards/InteractableSpawnCard/iscShrineGoldshoresAccess");
-                SpawnRandomly("sulfurpools", "SpawnCards/InteractableSpawnCard/iscShrineGoldshoresAccess");
-                if (Mods(softdepFogboundLagoon)) SpawnRandomly("FBLScene", "SpawnCards/InteractableSpawnCard/iscShrineGoldshoresAccess");
+                SpawnRandomly(3, "SpawnCards/InteractableSpawnCard/iscShrineGoldshoresAccess", true);
             }
             if (RemoveRandomGoldShrine.Value) LegacyResourcesAPI.Load<InteractableSpawnCard>("SpawnCards/InteractableSpawnCard/iscShrineGoldshoresAccess").maxSpawnsPerStage = 0;
             // Rallypoint Delta - Vanilla (timed chest) & BetterDrones (TC prototype)
@@ -241,16 +236,11 @@ namespace ConsistentStageFeatures
             void checkTeleporter()
             {
                 if (FRCSharp.VF2ConfigManager.disableForgottenHaven.Value) return;
-                if (FHTeleporterOnStage6.Value) foreach (var scene in new string[] { "golemplains", "golemplains2", "blackbeach", "blackbeach2", "snowyforest"/* , "quasitemporalobservatory" */ })
+                if (FHTeleporterOnStage6.Value)
                 {
-                    SceneDirector.onPrePopulateSceneServer += director =>
-                    {
-                        if (SceneCatalog.mostRecentSceneDef.cachedName != scene || Run.instance.loopClearCount <= 0) return;
-                        DirectorPlacementRule placementRule = new DirectorPlacementRule { placementMode = DirectorPlacementRule.PlacementMode.Random };
-                        DirectorCore.instance.TrySpawnObject(new DirectorSpawnRequest(FRCSharp.VF2ContentPackProvider.iscLooseRelic, placementRule, Run.instance.runRNG));
-                        DirectorCore.instance.TrySpawnObject(new DirectorSpawnRequest(FRCSharp.VF2ContentPackProvider.iscShatteredTeleporter, placementRule, Run.instance.runRNG));
-                    };
-                }   
+                    SpawnRandomly(6, FRCSharp.VF2ContentPackProvider.iscLooseRelic, true);
+                    SpawnRandomly(6, FRCSharp.VF2ContentPackProvider.iscShatteredTeleporter, true);
+                }
                 if (RemoveRandomFHTeleporter.Value) FRCSharp.VF2ContentPackProvider.iscShatteredTeleporter.maxSpawnsPerStage = 0;
             };
             // Stolen from vanillavoid
@@ -297,6 +287,21 @@ namespace ConsistentStageFeatures
             // Stage 10 - Vanilla (Primordial Teleporter)
 
             if (GoldShrineCost.Value != 200) LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/Shrines/ShrineGoldshoresAccess").GetComponent<PurchaseInteraction>().cost = 100;
+            if (GoldenCoastChests.Value < 4) Stage.onStageStartGlobal += stage =>
+            {
+                if (stage.sceneDef.cachedName != "goldshores") return;
+                GameObject preplaced = GameObject.Find("HOLDER: Preplaced Goodies");
+                if (preplaced == null) return;
+                List<GameObject> chests = new() { preplaced.transform.Find("Chest1 - 1").gameObject, preplaced.transform.Find("Chest1 - 2").gameObject, preplaced.transform.Find("Chest1 - 3").gameObject, preplaced.transform.Find("Chest1 - 4").gameObject };
+                List<GameObject> chestModels = FindObjectsOfType<GameObject>().Where(x => x.name == "mdlChest1").ToList();
+                for (int i = 4; i > GoldenCoastChests.Value; i--)
+                {
+                    int toRemove = Run.instance.runRNG.RangeInt(0, chests.Count);
+                    chests[toRemove].SetActive(false);
+                    chestModels.Find(x => x.transform.position.Equals(chests[toRemove].transform.position))?.SetActive(false);
+                    chests.RemoveAt(toRemove);
+                }
+            };
             if (GoldenCoastCombatShrine.Value)
             {
                 SpawnGuaranteed("goldshores", "SpawnCards/InteractableSpawnCard/iscShrineCombat", new Vector3(-73.98104f, -6.325237f, 82.57056f), new Vector3(0f, 200.0384f, 0f));
@@ -400,11 +405,7 @@ namespace ConsistentStageFeatures
         public static void HandleShrineOfRepair()
         {
             InteractableSpawnCard isc = ShrineOfRepair.Modules.ShrineOfRepairConfigManager.UsePickupPickerPanel.Value ? ShrineOfRepair.Modules.Interactables.ShrineOfRepairPicker.shrineSpawnCard : ShrineOfRepair.Modules.Interactables.ShrineOfRepairPurchase.shrineSpawnCard;
-            if (ShrineRepairOnStage5.Value)
-            {
-                SpawnRandomly("skymeadow", isc);
-                if (Mods(softdepForgottenRelics)) SpawnRandomly("slumberingsatellite", isc);
-            }
+            if (ShrineRepairOnStage5.Value) SpawnRandomly(5, isc, true);
             if (RemoveRandomShrineRepair.Value) isc.maxSpawnsPerStage = 0;
         }
 
@@ -469,15 +470,29 @@ namespace ConsistentStageFeatures
             SceneDirector.onPrePopulateSceneServer += director =>
             {
                 if (SceneCatalog.mostRecentSceneDef.cachedName != scene) return;
-                DirectorPlacementRule placementRule = new DirectorPlacementRule { placementMode = DirectorPlacementRule.PlacementMode.Random };
-                GameObject gameObject = DirectorCore.instance.TrySpawnObject(new DirectorSpawnRequest(spawnCard, placementRule, Run.instance.runRNG));
-                if (gameObject)
-                {
-                    PurchaseInteraction component = gameObject.GetComponent<PurchaseInteraction>();
-                    if (component && component.costType == CostTypeIndex.Money) component.Networkcost = Run.instance.GetDifficultyScaledCost(component.cost);
-                }
+                SpawnRandomlyInternal(spawnCard);
             };
             Log.LogDebug($"Added a Random Spawn of {spawnCard.name} at {scene}");
+        }
+        public static void SpawnRandomly(int stage, string dir, bool loop = false) { SpawnRandomly(stage, LegacyResourcesAPI.Load<SpawnCard>(dir), loop); }
+        public static void SpawnRandomly(int stage, SpawnCard spawnCard, bool loop = false)
+        {
+            SceneDirector.onPrePopulateSceneServer += director =>
+            {
+                if (loop ? (Run.instance.loopClearCount == (stage - 1) / 5 && Run.stagesPerLoop == (stage - 1) % 5) : (Run.instance.stageClearCount == stage - 1)) return;
+                SpawnRandomlyInternal(spawnCard);
+            };
+            Log.LogDebug($"Added a Random Spawn of {spawnCard.name} at Stage {stage}");
+        }
+        private static void SpawnRandomlyInternal(SpawnCard spawnCard)
+        {
+            DirectorPlacementRule placementRule = new DirectorPlacementRule { placementMode = DirectorPlacementRule.PlacementMode.Random };
+            GameObject gameObject = DirectorCore.instance.TrySpawnObject(new DirectorSpawnRequest(spawnCard, placementRule, Run.instance.runRNG));
+            if (gameObject)
+            {
+                PurchaseInteraction component = gameObject.GetComponent<PurchaseInteraction>();
+                if (component && component.costType == CostTypeIndex.Money) component.Networkcost = Run.instance.GetDifficultyScaledCost(component.cost);
+            }
         }
         public static bool Mods(params string[] arr)
         {
