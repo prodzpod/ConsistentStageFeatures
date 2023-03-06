@@ -18,18 +18,21 @@ namespace ConsistentStageFeatures
     [BepInDependency(softdepBulwarksHaunt, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(softdepFogboundLagoon, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(softdepForgottenRelics, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(softdepProperLoop, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(softdepShrineOfRepair, BepInDependency.DependencyFlags.SoftDependency)]
+    // [BepInDependency(softdepQueriersObservatory, BepInDependency.DependencyFlags.SoftDependency)]
     public class Main : BaseUnityPlugin
     {
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "ConsistentStageFeatures";
-        public const string PluginVersion = "1.0.7";
+        public const string PluginVersion = "1.0.8";
         public const string softdepAetherium = "com.KomradeSpectre.Aetherium";
         public const string softdepBulwarksHaunt = "com.themysticsword.bulwarkshaunt";
         public const string softdepFogboundLagoon = "JaceDaDorito.FBLStage";
         public const string softdepForgottenRelics = "PlasmaCore.ForgottenRelics";
         public const string softdepShrineOfRepair = "com.Viliger.ShrineOfRepair";
+        public const string softdepProperLoop = "prodzpod.ProperLoop";
         // public const string softdepQueriersObservatory = "prodzpod.SuffersFromThunderkit";
         public static ManualLogSource Log;
         public static Harmony Harmony;
@@ -259,7 +262,7 @@ namespace ConsistentStageFeatures
             iscNullPortal.maxSpawnsPerStage = 0;
             if (VieldsOnStage7.Value) TeleporterInteraction.onTeleporterChargedGlobal += tp =>
             {
-                if (Run.instance.loopClearCount > 0 && Run.instance.stageClearCount % Run.stagesPerLoop == 1)
+                if (StageCheck(7, true))
                     DirectorCore.instance.TrySpawnObject(new DirectorSpawnRequest(iscNullPortal, new DirectorPlacementRule
                     {
                         minDistance = 1f,
@@ -274,7 +277,7 @@ namespace ConsistentStageFeatures
             if (LocusOnStage10.Value) TeleporterInteraction.onTeleporterChargedGlobal += tp =>
             {
                 SpawnCard isc = LegacyResourcesAPI.Load<SpawnCard>("SpawnCards/InteractableSpawnCard/iscVoidPortal");
-                if (Run.instance.loopClearCount > 0 && Run.instance.stageClearCount % Run.stagesPerLoop == 4 && !(tp.portalSpawners?.ToList()?.First(x => x.portalSpawnCard == isc)?.willSpawn ?? true))
+                if (StageCheck(10, true) && !(tp.portalSpawners?.ToList()?.First(x => x.portalSpawnCard == isc)?.willSpawn ?? true))
                     DirectorCore.instance.TrySpawnObject(new DirectorSpawnRequest(isc, new DirectorPlacementRule
                     {
                         minDistance = 1f,
@@ -479,7 +482,7 @@ namespace ConsistentStageFeatures
         {
             SceneDirector.onPrePopulateSceneServer += director =>
             {
-                if (loop ? (Run.instance.loopClearCount == (stage - 1) / 5 && Run.stagesPerLoop == (stage - 1) % 5) : (Run.instance.stageClearCount == stage - 1)) return;
+                if (StageCheck(stage, loop)) return;
                 SpawnRandomlyInternal(spawnCard);
             };
             Log.LogDebug($"Added a Random Spawn of {spawnCard.name} at Stage {stage}");
@@ -498,6 +501,16 @@ namespace ConsistentStageFeatures
         {
             for (int i = 0; i < arr.Length; i++) if (!Chainloader.PluginInfos.ContainsKey(arr[i])) return false;
             return true;
+        }
+
+        public static bool StageCheck(int level, bool loop = false)
+        {
+            if (!loop) return Run.instance.stageClearCount == level - 1;
+            int loops = (level - 1) / 5;
+            int stage = (level - 1) % 5;
+            if (Mods(softdepProperLoop)) return checkProperLoop();
+            return Run.instance.loopClearCount >= loops && (Run.instance.stageClearCount % 5) == stage;
+            bool checkProperLoop() { return ProperLoop.Main.loops >= loops && ProperLoop.Main.stage == stage; }
         }
     }
 }
