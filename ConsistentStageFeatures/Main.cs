@@ -26,7 +26,7 @@ namespace ConsistentStageFeatures
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "ConsistentStageFeatures";
-        public const string PluginVersion = "1.0.8";
+        public const string PluginVersion = "1.0.9";
         public const string softdepAetherium = "com.KomradeSpectre.Aetherium";
         public const string softdepBulwarksHaunt = "com.themysticsword.bulwarkshaunt";
         public const string softdepFogboundLagoon = "JaceDaDorito.FBLStage";
@@ -482,7 +482,7 @@ namespace ConsistentStageFeatures
         {
             SceneDirector.onPrePopulateSceneServer += director =>
             {
-                if (StageCheck(stage, loop)) return;
+                if (!StageCheck(stage, loop)) return;
                 SpawnRandomlyInternal(spawnCard);
             };
             Log.LogDebug($"Added a Random Spawn of {spawnCard.name} at Stage {stage}");
