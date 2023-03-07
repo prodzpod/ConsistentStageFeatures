@@ -162,6 +162,7 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 </details>
 
 ## Changelog
+- 1.0.10: Bugfix
 - 1.0.9: Bugfix
 - 1.0.8: [ProperLoop](https://thunderstore.io/package/prodzpod/ProperLoop/) support
 - 1.0.7: Better loop calculation

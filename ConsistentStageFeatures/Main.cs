@@ -26,7 +26,7 @@ namespace ConsistentStageFeatures
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "ConsistentStageFeatures";
-        public const string PluginVersion = "1.0.9";
+        public const string PluginVersion = "1.0.10";
         public const string softdepAetherium = "com.KomradeSpectre.Aetherium";
         public const string softdepBulwarksHaunt = "com.themysticsword.bulwarkshaunt";
         public const string softdepFogboundLagoon = "JaceDaDorito.FBLStage";
@@ -480,9 +480,9 @@ namespace ConsistentStageFeatures
         public static void SpawnRandomly(int stage, string dir, bool loop = false) { SpawnRandomly(stage, LegacyResourcesAPI.Load<SpawnCard>(dir), loop); }
         public static void SpawnRandomly(int stage, SpawnCard spawnCard, bool loop = false)
         {
-            SceneDirector.onPrePopulateSceneServer += director =>
+            SceneDirector.onPostPopulateSceneServer += director =>
             {
-                if (!StageCheck(stage, loop)) return;
+                if (!StageCheck(stage, loop) || TeleporterInteraction.instance == null) return;
                 SpawnRandomlyInternal(spawnCard);
             };
             Log.LogDebug($"Added a Random Spawn of {spawnCard.name} at Stage {stage}");
