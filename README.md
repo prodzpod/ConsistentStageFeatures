@@ -98,6 +98,8 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 
 - Guaranteed [Shrine of Repair](https://thunderstore.io/package/viliger/ShrineOfRepair/): At least one Shrine of Repair will always spawn in a **random** location. Ability to turn off natural spawn is also configurable.
 ![Image](https://media.discordapp.net/attachments/515678914316861451/1078589394002399302/20230224164423_1.jpg)
+- **Default Off:** At least one Scrapper will always spawn in a **random** location.
+![Image](https://media.discordapp.net/attachments/515678821408571392/1085175022534021130/20230314210922_1.jpg)
 - **Default Off:** Sages' Shrine will spawn at **fixed** location in Sky Meadow.
 ![Image](https://media.discordapp.net/attachments/515678914316861451/1078681754493259837/20230224230556_1.jpg)
 - Sages' Shrine will spawn at **fixed** location in [Slumbering Satellite](https://thunderstore.io/package/PlasmaCore3/Forgotten_Relics/). **Sages' Shrines will no longer spawn randomly by default.**
@@ -114,6 +116,8 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 
 - **Other Mod** [Shrine of Repair](https://thunderstore.io/package/viliger/ShrineOfRepair/): Shrine of Repair will spawn at **fixed** location.
 ![Image](https://media.discordapp.net/attachments/515678914316861451/1078589395055153203/20230224164851_1.jpg)
+- [Umbral Obelisk](https://thunderstore.io/package/Nuxlar/UmbralMithrix/) will spawn at [Old Moon](https://thunderstore.io/package/RandomlyAwesome/Powerfully_Slow_Moon/) at **fixed** location.
+![Image](https://media.discordapp.net/attachments/515678821408571392/1085175022869549057/20230314211705_1.jpg)
 - **Default Off:** Scrapper will spawn at **fixed** location.
 ![Image](https://media.discordapp.net/attachments/515678914316861451/1078589395311001631/20230224164858_1.jpg)
 
@@ -162,6 +166,7 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 </details>
 
 ## Changelog
+- 1.1.0: Stage 5 Scrapper, Umbral Obelisk on Old Moon
 - 1.0.10: Bugfix
 - 1.0.9: Bugfix
 - 1.0.8: [ProperLoop](https://thunderstore.io/package/prodzpod/ProperLoop/) support

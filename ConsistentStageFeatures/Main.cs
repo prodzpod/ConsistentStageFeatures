@@ -10,6 +10,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 using RoR2.Navigation;
 using UnityEngine.AddressableAssets;
+using EntityStates;
+using EntityStates.BrotherMonster;
 
 namespace ConsistentStageFeatures
 {
@@ -21,12 +23,13 @@ namespace ConsistentStageFeatures
     [BepInDependency(softdepProperLoop, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(softdepShrineOfRepair, BepInDependency.DependencyFlags.SoftDependency)]
     // [BepInDependency(softdepQueriersObservatory, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("com.Nuxlar.UmbralMithrix", BepInDependency.DependencyFlags.SoftDependency)]
     public class Main : BaseUnityPlugin
     {
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "ConsistentStageFeatures";
-        public const string PluginVersion = "1.0.10";
+        public const string PluginVersion = "1.1.0";
         public const string softdepAetherium = "com.KomradeSpectre.Aetherium";
         public const string softdepBulwarksHaunt = "com.themysticsword.bulwarkshaunt";
         public const string softdepFogboundLagoon = "JaceDaDorito.FBLStage";
@@ -59,6 +62,7 @@ namespace ConsistentStageFeatures
         public static ConfigEntry<bool> HankOffersDrink;
         public static ConfigEntry<bool> REXOnStage4;
         public static ConfigEntry<bool> ShrineRepairOnStage5;
+        public static ConfigEntry<bool> ScrapperOnStage5;
         public static ConfigEntry<bool> RemoveRandomShrineRepair;
         public static ConfigEntry<bool> SageShrineOnMeadow;
         public static ConfigEntry<bool> SageShrineOnSatellite;
@@ -66,6 +70,7 @@ namespace ConsistentStageFeatures
         public static ConfigEntry<bool> BulwarkSwordOnSatellite;
         public static ConfigEntry<bool> ScrapperOnMoon;
         public static ConfigEntry<bool> RemoveRandomScrapper;
+        public static ConfigEntry<bool> ObeliskOnMoon1;
         public static ConfigEntry<bool> FHTeleporterOnStage6;
         public static ConfigEntry<bool> RemoveRandomFHTeleporter;
         public static ConfigEntry<bool> VieldsOnStage7;
@@ -110,6 +115,7 @@ namespace ConsistentStageFeatures
             REXOnStage4 = Config.Bind("Stage 4", "REX on Stage 4", true, "Guaranteed Fuel Array usage");
             MountainShrinesInSirens = Config.Bind("Stage 4", "Mountain Shrines on Siren`s Call", true, "lol");
             ShrineRepairOnStage5 = Config.Bind("Stage 5", "Shrine of Repair on Stage 5", true, "Guaranteed Shrine of Repair on stage 5.");
+            ScrapperOnStage5 = Config.Bind("Stage 5", "Scrapper on Stage 5", false, "Guaranteed Scrapper on stage 5.");
             RemoveRandomShrineRepair = Config.Bind("Stage 5", "Remove Random Shrine of Repair Spawns", false, "only the fixed spawn exists");
             SageShrineOnMeadow = Config.Bind("Stage 5", "Sage`s Shrine on Sky Meadow", false, "shmrez is weird fr fr");
             SageShrineOnSatellite = Config.Bind("Stage 5", "Sage`s Shrine on Slumbering Satellite", true, "makes it fixed");
@@ -118,6 +124,8 @@ namespace ConsistentStageFeatures
 
             ScrapperOnMoon = Config.Bind("Commencement", "Scrapper on Moon", false, "Scrapper on the Moon. Use it if you have scrappers rebalanced.");
             RemoveRandomScrapper = Config.Bind("Commencement", "Remove Random Scrapper Spawns", false, "only the fixed spawn exists");
+            ObeliskOnMoon1 = Config.Bind("Commencement", "Umbral Obelisk on Moon 1", true, "powerfully umbral moon...");
+
             FHTeleporterOnStage6 = Config.Bind("Looping", "Shattered Teleporter on Stage 6", true, "Guaranteed Shattered Teleporters on stage 6.");
             RemoveRandomFHTeleporter = Config.Bind("Looping", "Remove Random Shattered Teleporter Spawns", false, "only the fixed spawn exists");
             VieldsOnStage7 = Config.Bind("Looping", "Null Portal on Stage 7", false, "Guaranteed Null Portal on stage 7.");
@@ -210,6 +218,7 @@ namespace ConsistentStageFeatures
             // Abyssal Depths - Direseeker (Direseeker)
 
             if (Mods(softdepShrineOfRepair)) HandleShrineOfRepair();
+            if (ScrapperOnStage5.Value) SpawnRandomly(5, "SpawnCards/InteractableSpawnCard/iscScrapper", true);
             // Sky Meadow - Vanilla (Artifact Terminal)
             if (Mods(softdepForgottenRelics)) checkSageShrine();
             void checkSageShrine()
@@ -218,13 +227,21 @@ namespace ConsistentStageFeatures
                 if (SageShrineOnMeadow.Value) SpawnGuaranteed("skymeadow", FRCSharp.VF2ContentPackProvider.iscSagesShrine, new Vector3(-146.0359f, 144.0454f, 181.8587f), new Vector3(322.3633f, 139.1794f, 21.4546f));
                 if (SageShrineOnSatellite.Value) SpawnGuaranteed("slumberingsatellite", FRCSharp.VF2ContentPackProvider.iscSagesShrine, new Vector3(70.5048f, 108.5265f, -323.2408f), new Vector3(11.9998f, 144.8941f, 337.7272f));
                 if (RemoveRandomSageShrine.Value) FRCSharp.VF2ContentPackProvider.iscSagesShrine.maxSpawnsPerStage = 0;
+                //0
+                Stage.onStageStartGlobal += stage => { if (stage.sceneDef.cachedName == "slumberingsatellite") GameObject.Find("World").transform.Find("Gated Areas").Find("GateGround0").gameObject.SetActive(true); };
             };
             if (Mods(softdepForgottenRelics, softdepBulwarksHaunt)) checkBulwark();
             void checkBulwark()
             {
                 if (FRCSharp.VF2ConfigManager.disableSlumberingSatellite.Value) return;
                 if (BulwarkSwordOnSatellite.Value) SpawnGuaranteed("slumberingsatellite", BulwarksHaunt.Items.Sword.swordObjPrefab, new Vector3(-157.3885f, 69.9324f, 154.4549f), new Vector3(344.073f, 60.7323f, 1.596f));
-            };
+                //4,5
+                Stage.onStageStartGlobal += stage => { if (stage.sceneDef.cachedName == "slumberingsatellite")
+                {
+                    GameObject.Find("World").transform.Find("Gated Areas").Find("GateGround4").gameObject.SetActive(true);
+                    GameObject.Find("World").transform.Find("Gated Areas").Find("GateGround5").gameObject.SetActive(true);
+                }
+            }; };
 
             if (ScrapperOnMoon.Value)
             {
@@ -232,6 +249,24 @@ namespace ConsistentStageFeatures
                 SpawnGuaranteed("moon2", "SpawnCards/InteractableSpawnCard/iscScrapper", new Vector3(17.2254f, -190.6997f, -307.0245f), new Vector3(1.2947f, 87.988f, 16.1012f));
             }
             if (RemoveRandomScrapper.Value) LegacyResourcesAPI.Load<InteractableSpawnCard>("SpawnCards/InteractableSpawnCard/iscScrapper").maxSpawnsPerStage = 0;
+            if (Chainloader.PluginInfos.ContainsKey("com.Nuxlar.UmbralMithrix") && ObeliskOnMoon1.Value) spawnObeliskOnMoon();
+            void spawnObeliskOnMoon()
+            {
+                UmbralMithrix.UmbralMithrix inst = Chainloader.PluginInfos["com.Nuxlar.UmbralMithrix"].Instance as UmbralMithrix.UmbralMithrix;
+                Stage.onStageStartGlobal += stage =>
+                {
+                    if (stage.sceneDef.cachedName == "moon")
+                    {
+                        GameObject gameObject = Instantiate(inst.Obelisk, new Vector3(2616.943f, 204.9947f, 683.9297f), Quaternion.identity);
+                        gameObject.GetComponent<PurchaseInteraction>().NetworkcontextToken = "Summon The Umbral King?";
+                        gameObject.name = "UmbralObelisk";
+                        gameObject.transform.eulerAngles = new Vector3(0f, 66f, 0f);
+                        NetworkServer.Spawn(gameObject);
+                        inst.ArenaSetup();
+                        inst.Mithrix.GetComponent<EntityStateMachine>().initialStateType = new SerializableEntityStateType(typeof(ThroneSpawnState));
+                    }
+                };
+            }
             // Commencement - Vanilla (Shrine of Order, Lunar Bud)
             // Other Commencement Changes - BetterMoonPillars (pillars)
 

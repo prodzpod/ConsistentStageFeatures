@@ -72,6 +72,9 @@
 	  <Reference Include="ShrineOfRepair">
 	    <HintPath>..\..\libs\ShrineOfRepair-nstrip.dll</HintPath>
 	  </Reference>
+	  <Reference Include="UmbralMithrix">
+	    <HintPath>..\..\libs\UmbralMithrix-nstrip.dll</HintPath>
+	  </Reference>
 	  <Reference Include="Unity.Addressables">
 	    <HintPath>..\..\libs\Unity.Addressables-nstrip.dll</HintPath>
 	  </Reference>
