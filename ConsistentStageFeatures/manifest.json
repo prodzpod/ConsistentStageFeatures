@@ -1,6 +1,6 @@
 {
 	"name": "ConsistentStageFeatures",
-	"version_number": "1.1.0",
+	"version_number": "1.1.1",
 	"website_url": "https://github.com/prodzpod/ConsistentStageFeatures",
 	"description": "Tweaks to various stages that makes runs more consistent and knowledge-based.",
 	"dependencies": [

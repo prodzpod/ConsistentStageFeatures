@@ -29,7 +29,7 @@ namespace ConsistentStageFeatures
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "ConsistentStageFeatures";
-        public const string PluginVersion = "1.1.0";
+        public const string PluginVersion = "1.1.1";
         public const string softdepAetherium = "com.KomradeSpectre.Aetherium";
         public const string softdepBulwarksHaunt = "com.themysticsword.bulwarkshaunt";
         public const string softdepFogboundLagoon = "JaceDaDorito.FBLStage";
@@ -142,11 +142,14 @@ namespace ConsistentStageFeatures
             if (MaxVoidSeeds.Value != 3) Addressables.LoadAssetAsync<InteractableSpawnCard>("RoR2/DLC1/VoidCamp/iscVoidCamp.asset").WaitForCompletion().maxSpawnsPerStage = MaxVoidSeeds.Value;
             if (GuaranteedNewt.Value) On.RoR2.SceneObjectToggleGroup.Awake += (orig, self) =>
             {
-                GameObjectToggleGroup group = self.toggleGroups[self.toggleGroups.Length - 1];
-                if (SceneCatalog.mostRecentSceneDef.cachedName == "frozenwall")
-                    HG.ArrayUtils.ArrayAppend(ref group.objects, GameObject.Find("HOLDER: Preplaced Objects").transform.Find("NewtStatue, Guaranteed").gameObject);
-                if (SceneCatalog.mostRecentSceneDef.cachedName == "blackbeach") group.minEnabled = 1;
-                self.toggleGroups[self.toggleGroups.Length - 1] = group;
+                if (self.toggleGroups.Length > 0)
+                {
+                    GameObjectToggleGroup group = self.toggleGroups[self.toggleGroups.Length - 1];
+                    if (SceneCatalog.mostRecentSceneDef.cachedName == "frozenwall")
+                        HG.ArrayUtils.ArrayAppend(ref group.objects, GameObject.Find("HOLDER: Preplaced Objects").transform.Find("NewtStatue, Guaranteed").gameObject);
+                    if (SceneCatalog.mostRecentSceneDef.cachedName == "blackbeach") group.minEnabled = 1;
+                    self.toggleGroups[self.toggleGroups.Length - 1] = group;
+                }
                 orig(self);
             };
 
@@ -226,7 +229,6 @@ namespace ConsistentStageFeatures
                 if (FRCSharp.VF2ConfigManager.disableSagesShrine.Value) return;
                 if (SageShrineOnMeadow.Value) SpawnGuaranteed("skymeadow", FRCSharp.VF2ContentPackProvider.iscSagesShrine, new Vector3(-146.0359f, 144.0454f, 181.8587f), new Vector3(322.3633f, 139.1794f, 21.4546f));
                 if (SageShrineOnSatellite.Value) SpawnGuaranteed("slumberingsatellite", FRCSharp.VF2ContentPackProvider.iscSagesShrine, new Vector3(70.5048f, 108.5265f, -323.2408f), new Vector3(11.9998f, 144.8941f, 337.7272f));
-                if (RemoveRandomSageShrine.Value) FRCSharp.VF2ContentPackProvider.iscSagesShrine.maxSpawnsPerStage = 0;
                 //0
                 Stage.onStageStartGlobal += stage => { if (stage.sceneDef.cachedName == "slumberingsatellite") GameObject.Find("World").transform.Find("Gated Areas").Find("GateGround0").gameObject.SetActive(true); };
             };
@@ -279,8 +281,8 @@ namespace ConsistentStageFeatures
                     SpawnRandomly(6, FRCSharp.VF2ContentPackProvider.iscLooseRelic, true);
                     SpawnRandomly(6, FRCSharp.VF2ContentPackProvider.iscShatteredTeleporter, true);
                 }
-                if (RemoveRandomFHTeleporter.Value) FRCSharp.VF2ContentPackProvider.iscShatteredTeleporter.maxSpawnsPerStage = 0;
             };
+            if (Mods(softdepForgottenRelics)) Harmony.PatchAll(typeof(PatchFRInteractables));
             // Stolen from vanillavoid
             InteractableSpawnCard iscNullPortal = ScriptableObject.CreateInstance<InteractableSpawnCard>();
             iscNullPortal.name = "iscSpecialVoidFieldPortal";

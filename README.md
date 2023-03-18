@@ -166,6 +166,7 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 </details>
 
 ## Changelog
+- 1.1.1: Artifact Reliquary crash fix, Shattered Teleporter and Sage's Shrine actually gets removed
 - 1.1.0: Stage 5 Scrapper, Umbral Obelisk on Old Moon
 - 1.0.10: Bugfix
 - 1.0.9: Bugfix
