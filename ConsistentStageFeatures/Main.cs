@@ -12,6 +12,14 @@ using RoR2.Navigation;
 using UnityEngine.AddressableAssets;
 using EntityStates;
 using EntityStates.BrotherMonster;
+using RoR2.EntityLogic;
+using MonoMod.Cil;
+using RoR2.CharacterSpeech;
+using System;
+using static RoR2.CharacterSpeech.CharacterSpeechController;
+using Mono.Cecil.Cil;
+using R2API;
+using static RoR2.OutlineHighlight;
 
 namespace ConsistentStageFeatures
 {
@@ -29,7 +37,7 @@ namespace ConsistentStageFeatures
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "ConsistentStageFeatures";
-        public const string PluginVersion = "1.1.1";
+        public const string PluginVersion = "1.2.0";
         public const string softdepAetherium = "com.KomradeSpectre.Aetherium";
         public const string softdepBulwarksHaunt = "com.themysticsword.bulwarkshaunt";
         public const string softdepFogboundLagoon = "JaceDaDorito.FBLStage";
@@ -55,6 +63,7 @@ namespace ConsistentStageFeatures
         public static ConfigEntry<bool> LunarBudOnStage2;
         public static ConfigEntry<bool> RemoveRandomLunarBud;
         public static ConfigEntry<bool> AqueductButtonNoRelease;
+        public static ConfigEntry<int> AqueductButtonMax;
         public static ConfigEntry<bool> NKuhanaVoidGreen;
         public static ConfigEntry<bool> GoldShrineOnStage3;
         public static ConfigEntry<bool> RemoveRandomGoldShrine;
@@ -71,6 +80,12 @@ namespace ConsistentStageFeatures
         public static ConfigEntry<bool> ScrapperOnMoon;
         public static ConfigEntry<bool> RemoveRandomScrapper;
         public static ConfigEntry<bool> ObeliskOnMoon1;
+        public static ConfigEntry<int> SwordExtraLunar;
+        public static ConfigEntry<float> SwordHealth;
+        public static ConfigEntry<float> SwordDamage;
+        public static ConfigEntry<float> SwordSpeed;
+        public static ConfigEntry<float> SwordArmor;
+        public static ConfigEntry<float> SwordAttackSpeed;
         public static ConfigEntry<bool> FHTeleporterOnStage6;
         public static ConfigEntry<bool> RemoveRandomFHTeleporter;
         public static ConfigEntry<bool> VieldsOnStage7;
@@ -83,6 +98,7 @@ namespace ConsistentStageFeatures
         public static ConfigEntry<bool> VieldsNoLoot;
 
         public static bool hanked = false;
+        public static bool pissed = false;
         private ConfigEntry<bool> MountainShrinesInSirens;
 
         public void Awake()
@@ -107,6 +123,7 @@ namespace ConsistentStageFeatures
             LunarBudOnStage2 = Config.Bind("Stage 2", "Lunar bud on Stage 2", true, "Guaranteed Lunar bud on stage 2.");
             RemoveRandomLunarBud = Config.Bind("Stage 2", "Remove Random Lunar Bud Spawns", false, "only the fixed spawn exists");
             AqueductButtonNoRelease = Config.Bind("Stage 2", "Abandoned Aqueduct Pressure Plate Stays Pressed", false, "set to true when you're using difficulty mods, for solo players");
+            AqueductButtonMax = Config.Bind("Stage 2", "Abandoned Aqueduct Pressure Plate Max Buttons", 2, "max: 8");
             NKuhanaVoidGreen = Config.Bind("Stage 2", "N`kuhana Skeleton Drops Void Green", true, "i think you deserve it for going through Wetland Aspect");
             GoldShrineOnStage3 = Config.Bind("Stage 3", "Altar of Gold on Stage 3", true, "Guaranteed Altar of Gold on stage 3.");
             RemoveRandomGoldShrine = Config.Bind("Stage 3", "Remove Random Altar of Gold Spawns", false, "only the fixed spawn exists");
@@ -125,6 +142,12 @@ namespace ConsistentStageFeatures
             ScrapperOnMoon = Config.Bind("Commencement", "Scrapper on Moon", false, "Scrapper on the Moon. Use it if you have scrappers rebalanced.");
             RemoveRandomScrapper = Config.Bind("Commencement", "Remove Random Scrapper Spawns", false, "only the fixed spawn exists");
             ObeliskOnMoon1 = Config.Bind("Commencement", "Umbral Obelisk on Moon 1", true, "powerfully umbral moon...");
+            SwordExtraLunar = Config.Bind("Commencement", "Extra Lunar Coin with Crystalline Blade", 10, "Extra lunar coin reward for winning with the Crystalline Blade.");
+            SwordHealth = Config.Bind("Commencement", "Mithrix Health Multiplier with Crystalline Blade", 0f, "Stat buffs for Mithrix with Crystalline Blade. Multiplicative.");
+            SwordDamage = Config.Bind("Commencement", "Mithrix Damage Multiplier with Crystalline Blade", 0f, "Stat buffs for Mithrix with Crystalline Blade. Multiplicative.");
+            SwordSpeed = Config.Bind("Commencement", "Mithrix Speed Bonus with Crystalline Blade", 0.2f, "Stat buffs for Mithrix with Crystalline Blade. Multiplicative.");
+            SwordArmor = Config.Bind("Commencement", "Mithrix Armor Bonus with Crystalline Blade", 0f, "Stat buffs for Mithrix with Crystalline Blade. Multiplicative.");
+            SwordAttackSpeed = Config.Bind("Commencement", "Mithrix Attack Speed Multiplier with Crystalline Blade", 0.2f, "Stat buffs for Mithrix with Crystalline Blade. Multiplicative.");
 
             FHTeleporterOnStage6 = Config.Bind("Looping", "Shattered Teleporter on Stage 6", true, "Guaranteed Shattered Teleporters on stage 6.");
             RemoveRandomFHTeleporter = Config.Bind("Looping", "Remove Random Shattered Teleporter Spawns", false, "only the fixed spawn exists");
@@ -148,6 +171,11 @@ namespace ConsistentStageFeatures
                     if (SceneCatalog.mostRecentSceneDef.cachedName == "frozenwall")
                         HG.ArrayUtils.ArrayAppend(ref group.objects, GameObject.Find("HOLDER: Preplaced Objects").transform.Find("NewtStatue, Guaranteed").gameObject);
                     if (SceneCatalog.mostRecentSceneDef.cachedName == "blackbeach") group.minEnabled = 1;
+                    if (SceneCatalog.mostRecentSceneDef.cachedName == "goolake")
+                    {
+                        group.maxEnabled = AqueductButtonMax.Value;
+                        group.minEnabled = AqueductButtonMax.Value;
+                    }
                     self.toggleGroups[self.toggleGroups.Length - 1] = group;
                 }
                 orig(self);
@@ -185,6 +213,10 @@ namespace ConsistentStageFeatures
             }
             if (RemoveRandomLunarBud.Value) LegacyResourcesAPI.Load<InteractableSpawnCard>("SpawnCards/InteractableSpawnCard/iscLunarChest").maxSpawnsPerStage = 0;
             if (AqueductButtonNoRelease.Value) On.RoR2.PressurePlateController.SetSwitch += (orig, self, input) => { if (input == true) orig(self, input); };
+            if (AqueductButtonMax.Value != 2) Stage.onStageStartGlobal += stage =>
+            {
+                if (stage.sceneDef.cachedName == "goolake") GameObject.Find("HOLDER: Secret Ring Area Content").transform.Find("Entrance").Find("GLRuinGate").GetComponent<Counter>().threshold = AqueductButtonMax.Value;
+            };
             if (NKuhanaVoidGreen.Value) HackSkeletonForceSpawn();
             // Aphelian Sanctuary - KannaQoL (cleansing pool)
             // Dry Basin - Forgotten Relics (tar altar)
@@ -267,6 +299,76 @@ namespace ConsistentStageFeatures
                         inst.ArenaSetup();
                         inst.Mithrix.GetComponent<EntityStateMachine>().initialStateType = new SerializableEntityStateType(typeof(ThroneSpawnState));
                     }
+                };
+            }
+            if (Chainloader.PluginInfos.ContainsKey(softdepBulwarksHaunt))
+            {
+                Stage.onStageStartGlobal += stage =>
+                {
+                    if (stage.sceneDef.cachedName == "moon2") foreach (var user in NetworkUser.instancesList)
+                    {
+                        if (user.master.inventory.GetItemCount(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_Sword) > 0 || user.master.inventory.GetItemCount(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_SwordUnleashed) > 0)
+                            GameObject.Find("HOLDER: Gameplay Space").transform.Find("HOLDER: STATIC MESH").Find("Quadrant 5: Blood Arena").Find("Arena Weapons").Find("mdlBrotherSword (3)").gameObject.SetActive(false);
+                    }
+                };
+                SpeechInfo[] seeSword = { see("sword_1", "The blade..."), see("sword_2", "Brother...?"), see("sword_3", "You ask for death."), see("sword_4", "That was your last mistake."), see("sword_5", "You are not him.") };
+                SpeechInfo[] seeSwordHeretic = { see("sword_heretic_1", "You survived."), see("sword_heretic_2", "The job will be finished."), see("sword_heretic_3", "Nowhere to run, Heretic.") };
+                SpeechInfo[] killSword = { kill("sword_1", "You are unworthy."), kill("sword_2", "You are not him."), kill("sword_3", "Arrogant vermin."), kill("sword_4", "Nothing but forgery."), kill("sword_5", "Your tantrum ends here.") };
+                SpeechInfo[] killSwordHurt = { kill("sword_hurt_1", "THIS IS HOW YOU WIELD."), kill("sword_hurt_2", "INFERIOR."), kill("sword_hurt_3", "THIS IS NOT YOURS."), kill("sword_hurt_4", "NEVER DARE AGAIN.") };
+                SpeechInfo see(string id, string txt) { LanguageAPI.Add("BROTHER_SEE_" + id.ToUpper(), txt); return new SpeechInfo() { token = "BROTHER_SEE_" + id.ToUpper(), duration = 2, maxWait = 0.5f, mustPlay = true, priority = 10000 }; }
+                SpeechInfo kill(string id, string txt) { LanguageAPI.Add("BROTHER_KILL_" + id.ToUpper(), txt); return new SpeechInfo() { token = "BROTHER_KILL_" + id.ToUpper(), duration = 1, maxWait = 0.1f, mustPlay = true, priority = 10 }; }
+                IL.RoR2.CharacterSpeech.BrotherSpeechDriver.DoInitialSightResponse += (il) =>
+                {
+                    ILCursor c = new(il);
+                    c.GotoNext(x => x.MatchCallOrCallvirt<BrotherSpeechDriver>(nameof(BrotherSpeechDriver.SendReponseFromPool)));
+                    c.Emit(OpCodes.Ldarg_0);
+                    c.EmitDelegate<Func<SpeechInfo[], BrotherSpeechDriver, SpeechInfo[]>>((orig, self) =>
+                    {
+                        bool isHeretic = CharacterBody.readOnlyInstancesList.Any(x => x.bodyIndex == BrotherSpeechDriver.hereticBodyIndex);
+                        bool hasSword = CharacterBody.readOnlyInstancesList.Any(x => x.inventory.GetItemCount(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_Sword) > 0 || x.inventory.GetItemCount(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_SwordUnleashed) > 0);
+                        if (hasSword && !self.name.StartsWith("BrotherHurt")) return isHeretic ? seeSwordHeretic : seeSword;
+                        return orig;
+                    });
+                };
+                IL.RoR2.CharacterSpeech.BrotherSpeechDriver.OnBodyKill += (il) =>
+                {
+                    ILCursor c = new(il);
+                    c.GotoNext(x => x.MatchCallOrCallvirt<BrotherSpeechDriver>(nameof(BrotherSpeechDriver.SendReponseFromPool)));
+                    c.Emit(OpCodes.Ldarg_0);
+                    c.EmitDelegate<Func<SpeechInfo[], BrotherSpeechDriver, SpeechInfo[]>>((orig, self) =>
+                    {
+                        bool isHeretic = CharacterBody.readOnlyInstancesList.Any(x => x.bodyIndex == BrotherSpeechDriver.hereticBodyIndex);
+                        bool hasSword = CharacterBody.readOnlyInstancesList.Any(x => x.inventory.GetItemCount(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_Sword) > 0 || x.inventory.GetItemCount(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_SwordUnleashed) > 0);
+                        if (isHeretic) return orig;
+                        if (hasSword) return self.name.StartsWith("BrotherHurt") ? killSwordHurt : killSword;
+                        return orig;
+                    });
+                };
+                Stage.onStageStartGlobal += _ => pissed = false;
+                CharacterBody.onBodyStartGlobal += body =>
+                {
+                    if (body.name.StartsWith("Brother"))
+                    {
+                        bool hasSword = CharacterBody.readOnlyInstancesList.Any(x => x.inventory.GetItemCount(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_Sword) > 0 || x.inventory.GetItemCount(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_SwordUnleashed) > 0);
+                        pissed |= hasSword;
+                        if (!pissed) return;
+                        body.baseMaxHealth *= 1 + SwordHealth.Value;
+                        body.levelMaxHealth *= 1 + SwordHealth.Value;
+                        body.baseDamage *= 1 + SwordDamage.Value;
+                        body.levelDamage *= 1 + SwordDamage.Value;
+                        body.baseMoveSpeed *= 1 + SwordSpeed.Value;
+                        body.levelMoveSpeed *= 1 + SwordSpeed.Value;
+                        body.baseArmor *= 1 + SwordArmor.Value;
+                        body.levelArmor *= 1 + SwordArmor.Value;
+                        body.baseAttackSpeed *= 1 + SwordAttackSpeed.Value;
+                        body.levelAttackSpeed *= 1 + SwordAttackSpeed.Value;
+                    }
+                };
+                IL.RoR2.Run.BeginGameOver += (il) =>
+                {
+                    ILCursor c = new(il);
+                    c.GotoNext(x => x.MatchCallOrCallvirt<NetworkUser>(nameof(NetworkUser.AwardLunarCoins)));
+                    c.EmitDelegate<Func<uint, uint>>(orig => (uint)(orig + (pissed ? SwordExtraLunar.Value : 0)));
                 };
             }
             // Commencement - Vanilla (Shrine of Order, Lunar Bud)
@@ -422,7 +524,7 @@ namespace ConsistentStageFeatures
 
         public static void HandleHank()
         {
-            string[] items = { "Infusion", "HealingPotion", "AttackSpeedAndMoveSpeed", "SprintBonus", "MysticsItems_CoffeeBoostOnItemPickup", "Tonic", "Ketchup", "MysteriousVial", "RandomEquipmentTrigger", "<color=#ED7FCD>VV_ITEM_EHANCE_VIALS_ITEM", "ItemDefSeepingOcean", "SiphonOnLowHealth", "DropOfNecrosis", "SpatteredCollection", "ItemDefSubmergingCistern", "MysticsItems_GateChalice", "EQUIPMENT_JAR_OF_RESHAPING", "Molotov", "PressurizedCanister", "VendingMachine" };
+            string[] items = { "Infusion", "HealingPotion", "AttackSpeedAndMoveSpeed", "SprintBonus", "MysticsItems_CoffeeBoostOnItemPickup", "Tonic", "Ketchup", "MysteriousVial", "RandomEquipmentTrigger", "VV_ITEM_EHANCE_VIALS_ITEM", "ItemDefSeepingOcean", "SiphonOnLowHealth", "DropOfNecrosis", "SpatteredCollection", "ItemDefSubmergingCistern", "MysticsItems_GateChalice", "EQUIPMENT_JAR_OF_RESHAPING", "Molotov", "PressurizedCanister", "VendingMachine", "ITEM_GOTCE_BottledCommand", "ITEM_GOTCE_BottledEnigma", "ITEM_GOTCE_BottledMetamorphosis", "ITEM_GOTCE_gd2", "ITEM_GOTCE_TubOfBart", "ITEM_GOTCE_TubOfLard", "ITEM_GOTCE_DilutedFlask", "ITEM_GOTCE_FortifiedFlask", "ITEM_GOTCE_PaleAle" };
             if (HankOffersDrink.Value)
             {
                 Stage.onStageStartGlobal += _ => hanked = false;
