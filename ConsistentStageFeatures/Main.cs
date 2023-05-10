@@ -37,7 +37,7 @@ namespace ConsistentStageFeatures
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "ConsistentStageFeatures";
-        public const string PluginVersion = "1.2.0";
+        public const string PluginVersion = "1.2.1";
         public const string softdepAetherium = "com.KomradeSpectre.Aetherium";
         public const string softdepBulwarksHaunt = "com.themysticsword.bulwarkshaunt";
         public const string softdepFogboundLagoon = "JaceDaDorito.FBLStage";
@@ -345,23 +345,28 @@ namespace ConsistentStageFeatures
                     });
                 };
                 Stage.onStageStartGlobal += _ => pissed = false;
-                CharacterBody.onBodyStartGlobal += body =>
+                On.RoR2.ScriptedCombatEncounter.BeginEncounter += (orig, self) =>
                 {
-                    if (body.name.StartsWith("Brother"))
+                    orig(self);
+                    if (SceneCatalog.mostRecentSceneDef.cachedName.StartsWith("moon"))
                     {
                         bool hasSword = CharacterBody.readOnlyInstancesList.Any(x => x.inventory.GetItemCount(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_Sword) > 0 || x.inventory.GetItemCount(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_SwordUnleashed) > 0);
                         pissed |= hasSword;
                         if (!pissed) return;
-                        body.baseMaxHealth *= 1 + SwordHealth.Value;
-                        body.levelMaxHealth *= 1 + SwordHealth.Value;
-                        body.baseDamage *= 1 + SwordDamage.Value;
-                        body.levelDamage *= 1 + SwordDamage.Value;
-                        body.baseMoveSpeed *= 1 + SwordSpeed.Value;
-                        body.levelMoveSpeed *= 1 + SwordSpeed.Value;
-                        body.baseArmor *= 1 + SwordArmor.Value;
-                        body.levelArmor *= 1 + SwordArmor.Value;
-                        body.baseAttackSpeed *= 1 + SwordAttackSpeed.Value;
-                        body.levelAttackSpeed *= 1 + SwordAttackSpeed.Value;
+                        foreach (var member in self.combatSquad.membersList)
+                        {
+                            CharacterBody body = member.GetBody();
+                            body.baseMaxHealth *= 1 + SwordHealth.Value;
+                            body.levelMaxHealth *= 1 + SwordHealth.Value;
+                            body.baseDamage *= 1 + SwordDamage.Value;
+                            body.levelDamage *= 1 + SwordDamage.Value;
+                            body.baseMoveSpeed *= 1 + SwordSpeed.Value;
+                            body.levelMoveSpeed *= 1 + SwordSpeed.Value;
+                            body.baseArmor *= 1 + SwordArmor.Value;
+                            body.levelArmor *= 1 + SwordArmor.Value;
+                            body.baseAttackSpeed *= 1 + SwordAttackSpeed.Value;
+                            body.levelAttackSpeed *= 1 + SwordAttackSpeed.Value;
+                        }
                     }
                 };
                 IL.RoR2.Run.BeginGameOver += (il) =>

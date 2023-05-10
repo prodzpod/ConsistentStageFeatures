@@ -120,7 +120,7 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 ![Image](https://media.discordapp.net/attachments/515678821408571392/1085175022869549057/20230314211705_1.jpg)
 - **Default Off:** Scrapper will spawn at **fixed** location.
 ![Image](https://media.discordapp.net/attachments/515678914316861451/1078589395311001631/20230224164858_1.jpg)
-- When [Crystalline Blade](https://thunderstore.io/package/TheMysticSword/BulwarksHaunt/) is equipped, Mithrix will be 20% faster (configurable health, damage, attack speed, movement speed, armor) and has custom dialogue.
+- When [Crystalline Blade](https://thunderstore.io/package/TheMysticSword/BulwarksHaunt/) is equipped, Mithrix will be 20% faster (configurable health, damage, attack speed, movement speed, armor) and has custom dialogue. Defeating the buffed Mithrix will reward extra Lunar Coins.
 ![Image](https://cdn.discordapp.com/attachments/1099179371190824971/1103950065103536178/20230505164253_1.jpg)
 </p>
 </details>
@@ -167,6 +167,7 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 </details>
 
 ## Changelog
+- 1.2.1: mithrix stat fix
 - 1.2.0: Better Hank item pool (mostly GOTCE support), Crystalline Blade custom dialogue & stat boost
 - 1.1.1: Artifact Reliquary crash fix, Shattered Teleporter and Sage's Shrine actually gets removed
 - 1.1.0: Stage 5 Scrapper, Umbral Obelisk on Old Moon
