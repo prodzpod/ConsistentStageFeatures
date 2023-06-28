@@ -3,7 +3,7 @@
 
 This mod guarantees specific interactables in various stages (like AWU) that you can take advantage of as a form of mitigating RNG using game knowledge. Every element is configurable.
 
-Entry listed as **Default Off** must be turned on through config to enable, and Entry listed as **Other Mod** is quite literally what other mod does; It is merely there to explain the other changes this mod makes and to recommend if you want more stage features.
+Entry listed as **Default Off** must be turned on through config to enable, and Entry listed as **Other Mod** is quite literally what other mod does; It is merely there to explain the other changes this mod makes and to recommend if you want more stage features. Keep in mind that **only the ones not tagged "other mod" is part of CSF**. The following is a collection of all stage features in the modding environment at the moment.
 
 ## General
 - Time Scale Config: Enable/Disables run time flow per stage. By default, [Forgotten Haven](https://thunderstore.io/package/PlasmaCore3/Forgotten_Relics/) gets timestop disabled.
@@ -167,6 +167,7 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 </details>
 
 ## Changelog
+- 1.2.2: Spicy/Illegal hank config, slightly nerfed hank (weighted chance based on tier)
 - 1.2.1: mithrix stat fix
 - 1.2.0: Better Hank item pool (mostly GOTCE support), Crystalline Blade custom dialogue & stat boost
 - 1.1.1: Artifact Reliquary crash fix, Shattered Teleporter and Sage's Shrine actually gets removed

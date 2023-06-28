@@ -19,7 +19,6 @@ using System;
 using static RoR2.CharacterSpeech.CharacterSpeechController;
 using Mono.Cecil.Cil;
 using R2API;
-using static RoR2.OutlineHighlight;
 
 namespace ConsistentStageFeatures
 {
@@ -37,7 +36,7 @@ namespace ConsistentStageFeatures
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "ConsistentStageFeatures";
-        public const string PluginVersion = "1.2.1";
+        public const string PluginVersion = "1.2.2";
         public const string softdepAetherium = "com.KomradeSpectre.Aetherium";
         public const string softdepBulwarksHaunt = "com.themysticsword.bulwarkshaunt";
         public const string softdepFogboundLagoon = "JaceDaDorito.FBLStage";
@@ -69,6 +68,8 @@ namespace ConsistentStageFeatures
         public static ConfigEntry<bool> RemoveRandomGoldShrine;
         public static ConfigEntry<bool> SpecialChestOnPools;
         public static ConfigEntry<bool> HankOffersDrink;
+        public static ConfigEntry<bool> SpicyHank;
+        public static ConfigEntry<bool> IllegalHank;
         public static ConfigEntry<bool> REXOnStage4;
         public static ConfigEntry<bool> ShrineRepairOnStage5;
         public static ConfigEntry<bool> ScrapperOnStage5;
@@ -129,6 +130,8 @@ namespace ConsistentStageFeatures
             RemoveRandomGoldShrine = Config.Bind("Stage 3", "Remove Random Altar of Gold Spawns", false, "only the fixed spawn exists");
             SpecialChestOnPools = Config.Bind("Stage 3", "Special Chests on Sulfur Pools", true, "Spawns 3 Cloaked Chests and 3 Lockboxes (1 of which will be encrusted if player has void, encrusted nerf kinda)");
             HankOffersDrink = Config.Bind("Stage 3", "Hank Offers Drink", true, "Talking to Hank will result in a random drink.");
+            SpicyHank = Config.Bind("Stage 3", "GALSONE", false, "Hank offers GALSONE (per multiple requests)");
+            IllegalHank = Config.Bind("Stage 3", "Hank doesnt care for laws", false, "Hank will bypass ContentDisabler and the likes");
             REXOnStage4 = Config.Bind("Stage 4", "REX on Stage 4", true, "Guaranteed Fuel Array usage");
             MountainShrinesInSirens = Config.Bind("Stage 4", "Mountain Shrines on Siren`s Call", true, "lol");
             ShrineRepairOnStage5 = Config.Bind("Stage 5", "Shrine of Repair on Stage 5", true, "Guaranteed Shrine of Repair on stage 5.");
@@ -529,7 +532,9 @@ namespace ConsistentStageFeatures
 
         public static void HandleHank()
         {
-            string[] items = { "Infusion", "HealingPotion", "AttackSpeedAndMoveSpeed", "SprintBonus", "MysticsItems_CoffeeBoostOnItemPickup", "Tonic", "Ketchup", "MysteriousVial", "RandomEquipmentTrigger", "VV_ITEM_EHANCE_VIALS_ITEM", "ItemDefSeepingOcean", "SiphonOnLowHealth", "DropOfNecrosis", "SpatteredCollection", "ItemDefSubmergingCistern", "MysticsItems_GateChalice", "EQUIPMENT_JAR_OF_RESHAPING", "Molotov", "PressurizedCanister", "VendingMachine", "ITEM_GOTCE_BottledCommand", "ITEM_GOTCE_BottledEnigma", "ITEM_GOTCE_BottledMetamorphosis", "ITEM_GOTCE_gd2", "ITEM_GOTCE_TubOfBart", "ITEM_GOTCE_TubOfLard", "ITEM_GOTCE_DilutedFlask", "ITEM_GOTCE_FortifiedFlask", "ITEM_GOTCE_PaleAle" };
+            string[] items = { "AttackSpeedAndMoveSpeed", "MysteriousVial", "Infusion", "HealingPotion", "SprintBonus", "MysticsItems_CoffeeBoostOnItemPickup", "ITEM_GOTCE_gd2", "ITEM_GOTCE_TubOfBart", "ItemDefSubmergingCistern", "ItemDefSeepingOcean", "SiphonOnLowHealth", "DropOfNecrosis", "SpatteredCollection", "Tonic", "Ketchup", "RandomEquipmentTrigger", "VV_ITEM_EHANCE_VIALS_ITEM", "MysticsItems_GateChalice", "EQUIPMENT_JAR_OF_RESHAPING", "VendingMachine", "ITEM_GOTCE_BottledCommand", "ITEM_GOTCE_BottledEnigma", "ITEM_GOTCE_BottledMetamorphosis", "ITEM_GOTCE_TubOfLard", "ITEM_GOTCE_DilutedFlask", "ITEM_GOTCE_FortifiedFlask", "ITEM_GOTCE_PaleAle" };
+            string[] spicyItems = { "PressurizedCanister", "IgniteOnKill", "ExplodeOnDeath", "EquipmentMagazineVoid", "EquipmentMagazine", "StrengthenBurn", "Molotov" };
+            if (SpicyHank.Value) items = items.AddRangeToArray(spicyItems);
             if (HankOffersDrink.Value)
             {
                 Stage.onStageStartGlobal += _ => hanked = false;
@@ -539,10 +544,47 @@ namespace ConsistentStageFeatures
                     if (self.gameObject.name == "BadToTheBone" && !hanked)
                     {
                         hanked = true;
-                        List<PickupIndex> available =
-                            ItemCatalog.allItemDefs.Where(x => items.Contains(x.name)).Select(x => PickupCatalog.FindPickupIndex(x.itemIndex))
-                            .Union(EquipmentCatalog.equipmentDefs.Where(x => items.Contains(x.name)).Select(x => PickupCatalog.FindPickupIndex(x.equipmentIndex))).ToList();
-                        PickupIndex ret = Run.instance.treasureRng.NextElementUniform(available);
+                        WeightedSelection<List<PickupIndex>> hankSelection = new();
+                        List<PickupIndex> commons = new();
+                        List<PickupIndex> uncommons = new();
+                        List<PickupIndex> rares = new();
+                        List<PickupIndex> others = new();
+                        List<PickupIndex> equips = new();
+                        foreach (ItemDef item in (IllegalHank.Value ? ItemCatalog.allItemDefs : Run.instance.availableItems.ToArray().Select(x => ItemCatalog.GetItemDef(x))).Where(x => items.Contains(x.name)))
+                        {
+                            PickupIndex pickup = PickupCatalog.FindPickupIndex(item.itemIndex);
+                            switch (item.tier)
+                            {
+                                case ItemTier.Tier1:
+                                case ItemTier.VoidTier1:
+                                    commons.Add(pickup);
+                                    break;
+                                case ItemTier.Tier2:
+                                case ItemTier.VoidTier2:
+                                    uncommons.Add(pickup);
+                                    break;
+                                case ItemTier.Tier3:
+                                case ItemTier.VoidTier3:
+                                    rares.Add(pickup);
+                                    break;
+                                default:
+                                    others.Add(pickup);
+                                    break;
+                            }                            
+                        }
+                        foreach (EquipmentDef equip in (IllegalHank.Value ? EquipmentCatalog.equipmentDefs : Run.instance.availableEquipment.ToArray().Select(x => EquipmentCatalog.GetEquipmentDef(x))).Where(x => items.Contains(x.name)))
+                        {
+                            PickupIndex pickup = PickupCatalog.FindPickupIndex(equip.equipmentIndex);
+                            if (!equip.isBoss && !equip.isLunar) equips.Add(pickup);
+                            else others.Add(pickup);
+                        }
+                        if (commons.Count > 0) hankSelection.AddChoice(new() { value = commons, weight = 1f });
+                        if (uncommons.Count > 0) hankSelection.AddChoice(new() { value = uncommons, weight = 0.5f });
+                        if (rares.Count > 0) hankSelection.AddChoice(new() { value = rares, weight = 0.1f });
+                        if (others.Count > 0) hankSelection.AddChoice(new() { value = others, weight = 0.3f });
+                        if (equips.Count > 0) hankSelection.AddChoice(new() { value = equips, weight = 0.5f });
+                        if (hankSelection.Count == 0) return;
+                        PickupIndex ret = Run.instance.treasureRng.NextElementUniform(hankSelection.Evaluate(Run.instance.treasureRng.nextNormalizedFloat));
                         PickupDropletController.CreatePickupDroplet(ret, self.gameObject.transform.position + Vector3.up * 1.5f, Vector3.up * 5f + self.gameObject.transform.forward * 20f);
                     }
                 };
