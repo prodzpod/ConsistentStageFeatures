@@ -116,8 +116,6 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 
 - **Other Mod** [Shrine of Repair](https://thunderstore.io/package/viliger/ShrineOfRepair/): Shrine of Repair will spawn at **fixed** location.
 ![Image](https://media.discordapp.net/attachments/515678914316861451/1078589395055153203/20230224164851_1.jpg)
-- [Umbral Obelisk](https://thunderstore.io/package/Nuxlar/UmbralMithrix/) will spawn at [Old Moon](https://thunderstore.io/package/RandomlyAwesome/Powerfully_Slow_Moon/) at **fixed** location.
-![Image](https://media.discordapp.net/attachments/515678821408571392/1085175022869549057/20230314211705_1.jpg)
 - **Default Off:** Scrapper will spawn at **fixed** location.
 ![Image](https://media.discordapp.net/attachments/515678914316861451/1078589395311001631/20230224164858_1.jpg)
 - When [Crystalline Blade](https://thunderstore.io/package/TheMysticSword/BulwarksHaunt/) is equipped, Mithrix will be 20% faster (configurable health, damage, attack speed, movement speed, armor) and has custom dialogue. Defeating the buffed Mithrix will reward extra Lunar Coins.
@@ -167,6 +165,7 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 </details>
 
 ## Changelog
+- 1.2.3: removed umbralmithrix compat as obelisk is gone
 - 1.2.2: Spicy/Illegal hank config, slightly nerfed hank (weighted chance based on tier)
 - 1.2.1: mithrix stat fix
 - 1.2.0: Better Hank item pool (mostly GOTCE support), Crystalline Blade custom dialogue & stat boost

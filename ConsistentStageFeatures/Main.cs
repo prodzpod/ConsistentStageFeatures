@@ -30,13 +30,12 @@ namespace ConsistentStageFeatures
     [BepInDependency(softdepProperLoop, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(softdepShrineOfRepair, BepInDependency.DependencyFlags.SoftDependency)]
     // [BepInDependency(softdepQueriersObservatory, BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency("com.Nuxlar.UmbralMithrix", BepInDependency.DependencyFlags.SoftDependency)]
     public class Main : BaseUnityPlugin
     {
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "ConsistentStageFeatures";
-        public const string PluginVersion = "1.2.2";
+        public const string PluginVersion = "1.2.3";
         public const string softdepAetherium = "com.KomradeSpectre.Aetherium";
         public const string softdepBulwarksHaunt = "com.themysticsword.bulwarkshaunt";
         public const string softdepFogboundLagoon = "JaceDaDorito.FBLStage";
@@ -144,7 +143,6 @@ namespace ConsistentStageFeatures
 
             ScrapperOnMoon = Config.Bind("Commencement", "Scrapper on Moon", false, "Scrapper on the Moon. Use it if you have scrappers rebalanced.");
             RemoveRandomScrapper = Config.Bind("Commencement", "Remove Random Scrapper Spawns", false, "only the fixed spawn exists");
-            ObeliskOnMoon1 = Config.Bind("Commencement", "Umbral Obelisk on Moon 1", true, "powerfully umbral moon...");
             SwordExtraLunar = Config.Bind("Commencement", "Extra Lunar Coin with Crystalline Blade", 10, "Extra lunar coin reward for winning with the Crystalline Blade.");
             SwordHealth = Config.Bind("Commencement", "Mithrix Health Multiplier with Crystalline Blade", 0f, "Stat buffs for Mithrix with Crystalline Blade. Multiplicative.");
             SwordDamage = Config.Bind("Commencement", "Mithrix Damage Multiplier with Crystalline Blade", 0f, "Stat buffs for Mithrix with Crystalline Blade. Multiplicative.");
@@ -286,24 +284,6 @@ namespace ConsistentStageFeatures
                 SpawnGuaranteed("moon2", "SpawnCards/InteractableSpawnCard/iscScrapper", new Vector3(17.2254f, -190.6997f, -307.0245f), new Vector3(1.2947f, 87.988f, 16.1012f));
             }
             if (RemoveRandomScrapper.Value) LegacyResourcesAPI.Load<InteractableSpawnCard>("SpawnCards/InteractableSpawnCard/iscScrapper").maxSpawnsPerStage = 0;
-            if (Chainloader.PluginInfos.ContainsKey("com.Nuxlar.UmbralMithrix") && ObeliskOnMoon1.Value) spawnObeliskOnMoon();
-            void spawnObeliskOnMoon()
-            {
-                UmbralMithrix.UmbralMithrix inst = Chainloader.PluginInfos["com.Nuxlar.UmbralMithrix"].Instance as UmbralMithrix.UmbralMithrix;
-                Stage.onStageStartGlobal += stage =>
-                {
-                    if (stage.sceneDef.cachedName == "moon")
-                    {
-                        GameObject gameObject = Instantiate(inst.Obelisk, new Vector3(2616.943f, 204.9947f, 683.9297f), Quaternion.identity);
-                        gameObject.GetComponent<PurchaseInteraction>().NetworkcontextToken = "Summon The Umbral King?";
-                        gameObject.name = "UmbralObelisk";
-                        gameObject.transform.eulerAngles = new Vector3(0f, 66f, 0f);
-                        NetworkServer.Spawn(gameObject);
-                        inst.ArenaSetup();
-                        inst.Mithrix.GetComponent<EntityStateMachine>().initialStateType = new SerializableEntityStateType(typeof(ThroneSpawnState));
-                    }
-                };
-            }
             if (Chainloader.PluginInfos.ContainsKey(softdepBulwarksHaunt))
             {
                 Stage.onStageStartGlobal += stage =>
