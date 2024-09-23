@@ -35,14 +35,13 @@ namespace ConsistentStageFeatures
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "ConsistentStageFeatures";
-        public const string PluginVersion = "1.2.3";
+        public const string PluginVersion = "1.2.4";
         public const string softdepAetherium = "com.KomradeSpectre.Aetherium";
         public const string softdepBulwarksHaunt = "com.themysticsword.bulwarkshaunt";
         public const string softdepFogboundLagoon = "JaceDaDorito.FBLStage";
         public const string softdepForgottenRelics = "PlasmaCore.ForgottenRelics";
         public const string softdepShrineOfRepair = "com.Viliger.ShrineOfRepair";
         public const string softdepProperLoop = "prodzpod.ProperLoop";
-        // public const string softdepQueriersObservatory = "prodzpod.SuffersFromThunderkit";
         public static ManualLogSource Log;
         public static Harmony Harmony;
         public static PluginInfo pluginInfo;

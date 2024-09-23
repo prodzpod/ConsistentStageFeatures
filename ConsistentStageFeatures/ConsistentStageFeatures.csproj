@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFramework>netstandard2.1</TargetFramework>
 		<LangVersion>preview</LangVersion>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
@@ -29,9 +29,6 @@
 	  </Reference>
 	  <Reference Include="com.unity.multiplayer-hlapi.Runtime">
 	    <HintPath>..\..\libs\com.unity.multiplayer-hlapi.Runtime-nstrip.dll</HintPath>
-	  </Reference>
-	  <Reference Include="FblAssembly">
-	    <HintPath>..\..\libs\FblAssembly-nstrip.dll</HintPath>
 	  </Reference>
 	  <Reference Include="FHCSharp">
 	    <HintPath>..\..\libs\FHCSharp-nstrip.dll</HintPath>
@@ -71,9 +68,6 @@
 	  </Reference>
 	  <Reference Include="ShrineOfRepair">
 	    <HintPath>..\..\libs\ShrineOfRepair-nstrip.dll</HintPath>
-	  </Reference>
-	  <Reference Include="UmbralMithrix">
-	    <HintPath>..\..\libs\UmbralMithrix-nstrip.dll</HintPath>
 	  </Reference>
 	  <Reference Include="Unity.Addressables">
 	    <HintPath>..\..\libs\Unity.Addressables-nstrip.dll</HintPath>
