@@ -66,7 +66,7 @@ Entry listed as **Default Off** must be turned on through config to enable.
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224230949_1.jpg)
 
 - Two bombardment drones in Rallypoint Delta.
-![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20251218034634_1.jpg)
+![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20251218034733_1.jpg)
 - Cloaked Chest will spawn at **fixed** location in Sulfur Pools, as well as two Lockboxes (indirect buff to Rusted Key)
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224163917_1.jpg)
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224163845_1.jpg)
