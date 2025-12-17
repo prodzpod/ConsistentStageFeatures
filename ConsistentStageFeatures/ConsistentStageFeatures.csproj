@@ -27,6 +27,9 @@
 	  <Reference Include="BulwarksHaunt">
 	    <HintPath>..\..\libs\BulwarksHaunt-nstrip.dll</HintPath>
 	  </Reference>
+	  <Reference Include="Catacombs">
+	    <HintPath>..\..\libs\Catacombs-nstrip.dll</HintPath>
+	  </Reference>
 	  <Reference Include="com.unity.multiplayer-hlapi.Runtime">
 	    <HintPath>..\..\libs\com.unity.multiplayer-hlapi.Runtime-nstrip.dll</HintPath>
 	  </Reference>
@@ -66,8 +69,14 @@
 	  <Reference Include="RoR2BepInExPack">
 	    <HintPath>..\..\libs\RoR2BepInExPack-nstrip.dll</HintPath>
 	  </Reference>
+	  <Reference Include="Sandswept">
+	    <HintPath>..\..\libs\Sandswept-nstrip.dll</HintPath>
+	  </Reference>
 	  <Reference Include="ShrineOfRepair">
 	    <HintPath>..\..\libs\ShrineOfRepair-nstrip.dll</HintPath>
+	  </Reference>
+	  <Reference Include="SM64BBF">
+	    <HintPath>..\..\libs\SM64BBF-nstrip.dll</HintPath>
 	  </Reference>
 	  <Reference Include="Unity.Addressables">
 	    <HintPath>..\..\libs\Unity.Addressables-nstrip.dll</HintPath>

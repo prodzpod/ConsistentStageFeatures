@@ -29,19 +29,21 @@ namespace ConsistentStageFeatures
     [BepInDependency(softdepForgottenRelics, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(softdepProperLoop, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(softdepShrineOfRepair, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(softdepSandswept, BepInDependency.DependencyFlags.SoftDependency)]
     // [BepInDependency(softdepQueriersObservatory, BepInDependency.DependencyFlags.SoftDependency)]
     public class Main : BaseUnityPlugin
     {
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "ConsistentStageFeatures";
-        public const string PluginVersion = "1.2.4";
+        public const string PluginVersion = "1.3.0";
         public const string softdepAetherium = "com.KomradeSpectre.Aetherium";
         public const string softdepBulwarksHaunt = "com.themysticsword.bulwarkshaunt";
         public const string softdepFogboundLagoon = "JaceDaDorito.FBLStage";
         public const string softdepForgottenRelics = "PlasmaCore.ForgottenRelics";
         public const string softdepShrineOfRepair = "com.Viliger.ShrineOfRepair";
         public const string softdepProperLoop = "prodzpod.ProperLoop";
+        public const string softdepSandswept = "com.TeamSandswept.Sandswept";
         public static ManualLogSource Log;
         public static Harmony Harmony;
         public static PluginInfo pluginInfo;
@@ -56,19 +58,26 @@ namespace ConsistentStageFeatures
         public static ConfigEntry<bool> RedPrinterOnSiphoned;
         public static ConfigEntry<bool> GreenPrinterOnPlains;
         public static ConfigEntry<bool> YellowPrinterOnRoost;
+        public static ConfigEntry<bool> WhitePrintersOnFalls;
+        public static ConfigEntry<bool> DroneAssemblyOnAbodes;
         // public static ConfigEntry<bool> OrderShrineOnObservatory;
         public static ConfigEntry<bool> LunarBudOnStage2;
         public static ConfigEntry<bool> RemoveRandomLunarBud;
         public static ConfigEntry<bool> AqueductButtonNoRelease;
         public static ConfigEntry<int> AqueductButtonMax;
         public static ConfigEntry<bool> NKuhanaVoidGreen;
+        public static ConfigEntry<bool> ShrineSacOnNest;
+        public static ConfigEntry<bool> ShrineFutureOnAltar;
         public static ConfigEntry<bool> GoldShrineOnStage3;
-        public static ConfigEntry<bool> RemoveRandomGoldShrine;
+        public static ConfigEntry<bool> DronesInRallypoint;
         public static ConfigEntry<bool> SpecialChestOnPools;
+        public static ConfigEntry<bool> TempDispenserOnColony;
+        public static ConfigEntry<bool> ShrineRuinOnAlluvium;
         public static ConfigEntry<bool> HankOffersDrink;
         public static ConfigEntry<bool> SpicyHank;
         public static ConfigEntry<bool> IllegalHank;
         public static ConfigEntry<bool> REXOnStage4;
+        public static ConfigEntry<bool> DroneCombinerOnCrater;
         public static ConfigEntry<bool> ShrineRepairOnStage5;
         public static ConfigEntry<bool> ScrapperOnStage5;
         public static ConfigEntry<bool> RemoveRandomShrineRepair;
@@ -118,20 +127,27 @@ namespace ConsistentStageFeatures
             RedPrinterOnSiphoned = Config.Bind("Stage 1", "Red Printer on Siphoned Forest", false, "make sure to balance printer before this");
             GreenPrinterOnPlains = Config.Bind("Stage 1", "Green Printer on Golem Plains", false, "make sure to balance printer before this");
             YellowPrinterOnRoost = Config.Bind("Stage 1", "Yellow Printer on Distant Roost", false, "make sure to balance printer before this");
+            WhitePrintersOnFalls = Config.Bind("Stage 1", "3 White Printers on Viscous Falls", false, "make sure to balance printer before this");
+            DroneAssemblyOnAbodes = Config.Bind("Stage 1", "Drone Assembly Station on Shattered Abodes", false, "epic unused content");
             //  OrderShrineOnObservatory = Config.Bind("Stage 1", "Shrine of Order on Queriers Observatory", true, "hehe");
             LunarBudOnStage2 = Config.Bind("Stage 2", "Lunar bud on Stage 2", true, "Guaranteed Lunar bud on stage 2.");
             RemoveRandomLunarBud = Config.Bind("Stage 2", "Remove Random Lunar Bud Spawns", false, "only the fixed spawn exists");
             AqueductButtonNoRelease = Config.Bind("Stage 2", "Abandoned Aqueduct Pressure Plate Stays Pressed", false, "set to true when you're using difficulty mods, for solo players");
             AqueductButtonMax = Config.Bind("Stage 2", "Abandoned Aqueduct Pressure Plate Max Buttons", 2, "max: 8");
             NKuhanaVoidGreen = Config.Bind("Stage 2", "N`kuhana Skeleton Drops Void Green", true, "i think you deserve it for going through Wetland Aspect");
+            ShrineSacOnNest = Config.Bind("Stage 2", "3 Shrine of Sacrifices on Pretender`s Precipice", true, "its on the spikes");
+            ShrineFutureOnAltar = Config.Bind("Stage 2", "Shrine of Future on Reformed Altar", true, "i made it and i still dk about the blue diamond");
             GoldShrineOnStage3 = Config.Bind("Stage 3", "Altar of Gold on Stage 3", true, "Guaranteed Altar of Gold on stage 3.");
-            RemoveRandomGoldShrine = Config.Bind("Stage 3", "Remove Random Altar of Gold Spawns", false, "only the fixed spawn exists");
             SpecialChestOnPools = Config.Bind("Stage 3", "Special Chests on Sulfur Pools", true, "Spawns 3 Cloaked Chests and 3 Lockboxes (1 of which will be encrusted if player has void, encrusted nerf kinda)");
+            DronesInRallypoint = Config.Bind("Stage 3", "2 Bombardment Drones on Rallypoint Delta", true, "RIP betterdrones they never found it");
+            TempDispenserOnColony = Config.Bind("Stage 3", "3 Temporary Item Dispenser on Treeborn Colony", true, "Spawns 3 Temporary Item Dispensers");
+            ShrineRuinOnAlluvium = Config.Bind("Stage 3", "Shrine of Ruin on Iron Alluvium", true, "sand");
             HankOffersDrink = Config.Bind("Stage 3", "Hank Offers Drink", true, "Talking to Hank will result in a random drink.");
             SpicyHank = Config.Bind("Stage 3", "GALSONE", false, "Hank offers GALSONE (per multiple requests)");
             IllegalHank = Config.Bind("Stage 3", "Hank doesnt care for laws", false, "Hank will bypass ContentDisabler and the likes");
             REXOnStage4 = Config.Bind("Stage 4", "REX on Stage 4", true, "Guaranteed Fuel Array usage");
             MountainShrinesInSirens = Config.Bind("Stage 4", "Mountain Shrines on Siren`s Call", true, "lol");
+            DroneCombinerOnCrater = Config.Bind("Stage 4", "Drone Combiner Station on Repurposed Crater", true, "g");
             ShrineRepairOnStage5 = Config.Bind("Stage 5", "Shrine of Repair on Stage 5", true, "Guaranteed Shrine of Repair on stage 5.");
             ScrapperOnStage5 = Config.Bind("Stage 5", "Scrapper on Stage 5", false, "Guaranteed Scrapper on stage 5.");
             RemoveRandomShrineRepair = Config.Bind("Stage 5", "Remove Random Shrine of Repair Spawns", false, "only the fixed spawn exists");
@@ -200,9 +216,22 @@ namespace ConsistentStageFeatures
                 SpawnGuaranteed("blackbeach", "SpawnCards/InteractableSpawnCard/iscDuplicatorWild", new Vector3(203.9892f, -122.2774f, -105.9803f), new Vector3(45.3964f, 71.6722f, 7.0832f));
                 SpawnGuaranteed("blackbeach2", "SpawnCards/InteractableSpawnCard/iscDuplicatorWild", new Vector3(-137.3705f, 46.7941f, -97.3107f), new Vector3(15.839f, 115.0119f, 10.6805f));
             }
-            // if (Mods(softdepQueriersObservatory)) {
-            //  if (OrderShrineOnObservatory.Value) SpawnGuaranteed("Queriersobservatory", "", new Vector3(), new Vector3());
-            // }
+            if (WhitePrintersOnFalls.Value)
+            {
+                SpawnGuaranteed("lakes", "SpawnCards/InteractableSpawnCard/iscDuplicator", new(167.37f, 77.05f, -18.47f), new(5, 225, 358));
+                SpawnGuaranteed("lakes", "SpawnCards/InteractableSpawnCard/iscDuplicator", new(170.36f, 77.13f, -10.62f), new(32, 225, 342));
+                SpawnGuaranteed("lakes", "SpawnCards/InteractableSpawnCard/iscDuplicator", new(171.95f, 80.05f, -12.75f), new(35, 223, 342));
+                SpawnGuaranteed("lakesnight", "SpawnCards/InteractableSpawnCard/iscDuplicator", new(167.37f, 77.05f, -18.47f), new(5, 225, 358));
+                SpawnGuaranteed("lakesnight", "SpawnCards/InteractableSpawnCard/iscDuplicator", new(170.36f, 77.13f, -10.62f), new(32, 225, 342));
+                SpawnGuaranteed("lakesnight", "SpawnCards/InteractableSpawnCard/iscDuplicator", new(171.95f, 80.05f, -12.75f), new(35, 223, 342));
+            }
+            if (DroneAssemblyOnAbodes.Value)
+            {
+                var isc = Addressables.LoadAssetAsync<InteractableSpawnCard>("RoR2/DLC3/DroneAssemblyStation/iscDroneAssemblyStation.asset").WaitForCompletion();
+                SpawnGuaranteed("village", isc, new(146.78f, 40.98f, 119.38f), new(0, 90, 0));
+                SpawnGuaranteed("villagenight", isc, new(146.78f, 40.98f, 119.38f), new(0, 90, 0));
+            }
+            // BOB - command chest
 
             if (LunarBudOnStage2.Value)
             {
@@ -218,23 +247,53 @@ namespace ConsistentStageFeatures
                 if (stage.sceneDef.cachedName == "goolake") GameObject.Find("HOLDER: Secret Ring Area Content").transform.Find("Entrance").Find("GLRuinGate").GetComponent<Counter>().threshold = AqueductButtonMax.Value;
             };
             if (NKuhanaVoidGreen.Value) HackSkeletonForceSpawn();
+            if (ShrineSacOnNest.Value && Mods(softdepSandswept)) sandsweep();
+            void sandsweep()
+            {
+                SpawnGuaranteed("nest", Sandswept.Interactables.Regular.ShrineOfSacrifice.Instance.interactableSpawnCard, new Vector3(-92.1372f, 178.6755f, 98.9633f), new Vector3(27.8571f, 81.1678f, 327.1132f));
+                SpawnGuaranteed("nest", Sandswept.Interactables.Regular.ShrineOfSacrifice.Instance.interactableSpawnCard, new Vector3(-168.9947f, 113.1349f, 135.2753f), new Vector3(320.8246f, 325.649f, 9.8716f));
+                SpawnGuaranteed("nest", Sandswept.Interactables.Regular.ShrineOfSacrifice.Instance.interactableSpawnCard, new Vector3(-185.045f, 244.1564f, 40.2286f), new Vector3(324.0448f, 302.1264f, 0f));
+            }
+            if (ShrineFutureOnAltar.Value && Mods(softdepSandswept)) sandsweep2();
+            void sandsweep2()
+            {
+                SpawnGuaranteed("lemuriantemple", Sandswept.Interactables.Regular.ShrineOfTheFuture.Instance.interactableSpawnCard, new Vector3(-9.1602f, 22.8145f, -174.1507f), new Vector3(0, 110, 0));
+            }
+            // Catacombs - Legendary Chest
             // Aphelian Sanctuary - KannaQoL (cleansing pool)
             // Dry Basin - Forgotten Relics (tar altar)
 
-            if (GoldShrineOnStage3.Value)
+            if (GoldShrineOnStage3.Value) SpawnRandomly(3, "SpawnCards/InteractableSpawnCard/iscShrineGoldshoresAccess", true);
+            if (DronesInRallypoint.Value)
             {
-                LegacyResourcesAPI.Load<InteractableSpawnCard>("SpawnCards/InteractableSpawnCard/iscShrineGoldshoresAccess").maxSpawnsPerStage = 1;
-                SpawnRandomly(3, "SpawnCards/InteractableSpawnCard/iscShrineGoldshoresAccess", true);
+                var isc = Addressables.LoadAssetAsync<InteractableSpawnCard>("RoR2/DLC3/Drones/iscBrokenBombardmentDrone.asset").WaitForCompletion();
+                SpawnGuaranteed("frozenwall", isc, new Vector3(55.2139f, 110.3825f, 81.2108f), new Vector3(25.6394f, 358.1392f, 19.5398f));
+                SpawnGuaranteed("frozenwall", isc, new Vector3(60.8511f, 111.615f, 79.4217f), new Vector3(53.5153f, 198.3919f, 329.8275f));
             }
-            if (RemoveRandomGoldShrine.Value) LegacyResourcesAPI.Load<InteractableSpawnCard>("SpawnCards/InteractableSpawnCard/iscShrineGoldshoresAccess").maxSpawnsPerStage = 0;
-            // Rallypoint Delta - Vanilla (timed chest) & BetterDrones (TC prototype)
+
             // Scorched Acres - Mystic's Items (ancient mask)
+            if (ShrineRuinOnAlluvium.Value) sandsweep3();
+            void sandsweep3()
+            {
+                SpawnGuaranteed("ironalluvium", Sandswept.Interactables.Regular.ShrineOfRuin.Instance.interactableSpawnCard, new Vector3(208.9976f, 151.4559f, 12.1333f), new Vector3(309.2588f, 251.1624f, 284.5793f));
+                SpawnGuaranteed("ironalluvium2", Sandswept.Interactables.Regular.ShrineOfRuin.Instance.interactableSpawnCard, new Vector3(208.9976f, 151.4559f, 12.1333f), new Vector3(309.2588f, 251.1624f, 284.5793f));
+            }
             // Fogbound Lagoon - Fogbound Lagoon (timed chest)
             if (SpecialChestOnPools.Value)
             {
                 SpawnGuaranteed("sulfurpools", "SpawnCards/InteractableSpawnCard/iscChest1Stealthed", new Vector3(-0.1489f, -11.2628f, -58.985f), new Vector3(332.4133f, 147.7081f, 333.2504f));
                 SpawnGuaranteed("sulfurpools", "SpawnCards/InteractableSpawnCard/iscLockbox", new Vector3(22.7433f, -5.3875f, -236.629f), new Vector3(20.4497f, 16.1306f, 5.5421f));
                 SpawnGuaranteed("sulfurpools", "SpawnCards/InteractableSpawnCard/iscLockbox", new Vector3(-160.0294f, 7.244f, 122.3465f), new Vector3(27.0561f, 87.8281f, 352.8062f));
+            }
+            if (TempDispenserOnColony.Value)
+            {
+                var isc = Addressables.LoadAssetAsync<InteractableSpawnCard>("RoR2/DLC3/TemporaryItemsDistributor/iscTemporaryItemsShop.asset").WaitForCompletion();
+                SpawnGuaranteed("habitat", isc, new Vector3(14.2481f, 25.6211f, -176.5436f), new Vector3(0, 0, 0));
+                SpawnGuaranteed("habitat", isc, new Vector3(-15.8177f, 25.6102f, -167.1288f), new Vector3(0, 40, 0));
+                SpawnGuaranteed("habitat", isc, new Vector3(-30.0604f, 25.6226f, -136.5387f), new Vector3(0, 80, 0));
+                SpawnGuaranteed("habitatfall", isc, new Vector3(14.2481f, 25.6211f, -176.5436f), new Vector3(0, 0, 0));
+                SpawnGuaranteed("habitatfall", isc, new Vector3(-15.8177f, 25.6102f, -167.1288f), new Vector3(0, 40, 0));
+                SpawnGuaranteed("habitatfall", isc, new Vector3(-30.0604f, 25.6226f, -136.5387f), new Vector3(0, 80, 0));
             }
             if (Mods(softdepFogboundLagoon)) HandleHank();
 
@@ -251,7 +310,14 @@ namespace ConsistentStageFeatures
             }
             // Sundered Grove - Vanilla (Cool legendary chest gimmick)
             // Abyssal Depths - Direseeker (Direseeker)
-
+            if (DroneCombinerOnCrater.Value)
+            {
+                var isc = Addressables.LoadAssetAsync<InteractableSpawnCard>("RoR2/DLC3/DroneCombinerStation/iscDroneCombinerStation.asset").WaitForCompletion();
+                SpawnGuaranteed("repurposedcrater", isc, new Vector3(-250.5519f, 121.0383f, 12.8023f), new Vector3(0, 340.961f, 0));
+                SpawnGuaranteed("repurposedcrater", isc, new Vector3(-242.3186f, 121.0383f, 57.3302f), new Vector3(0, 253.0387f, 0));
+            }
+            // Conduit Canyon - Sentry Keys
+            // Prime Meridian - CHEF
             if (Mods(softdepShrineOfRepair)) HandleShrineOfRepair();
             if (ScrapperOnStage5.Value) SpawnRandomly(5, "SpawnCards/InteractableSpawnCard/iscScrapper", true);
             // Sky Meadow - Vanilla (Artifact Terminal)
@@ -276,7 +342,8 @@ namespace ConsistentStageFeatures
                     GameObject.Find("World").transform.Find("Gated Areas").Find("GateGround5").gameObject.SetActive(true);
                 }
             }; };
-
+            // Solutional Haunt - TC280, Prison Matrix
+            // Helminth Hatchery - Sorry sword is broken here
             if (ScrapperOnMoon.Value)
             {
                 SpawnGuaranteed("moon", "SpawnCards/InteractableSpawnCard/iscScrapper", new Vector3(804.2821f, 287.1601f, 214.5148f), new Vector3(351.5653f, 249.8895f, 10.3f));
@@ -289,7 +356,7 @@ namespace ConsistentStageFeatures
                 {
                     if (stage.sceneDef.cachedName == "moon2") foreach (var user in NetworkUser.instancesList)
                     {
-                        if (user.master.inventory.GetItemCount(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_Sword) > 0 || user.master.inventory.GetItemCount(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_SwordUnleashed) > 0)
+                        if (user.master.inventory.GetItemCountEffective(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_Sword) > 0 || user.master.inventory.GetItemCountEffective(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_SwordUnleashed) > 0)
                             GameObject.Find("HOLDER: Gameplay Space").transform.Find("HOLDER: STATIC MESH").Find("Quadrant 5: Blood Arena").Find("Arena Weapons").Find("mdlBrotherSword (3)").gameObject.SetActive(false);
                     }
                 };
@@ -307,7 +374,7 @@ namespace ConsistentStageFeatures
                     c.EmitDelegate<Func<SpeechInfo[], BrotherSpeechDriver, SpeechInfo[]>>((orig, self) =>
                     {
                         bool isHeretic = CharacterBody.readOnlyInstancesList.Any(x => x.bodyIndex == BrotherSpeechDriver.hereticBodyIndex);
-                        bool hasSword = CharacterBody.readOnlyInstancesList.Any(x => x.inventory.GetItemCount(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_Sword) > 0 || x.inventory.GetItemCount(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_SwordUnleashed) > 0);
+                        bool hasSword = CharacterBody.readOnlyInstancesList.Any(x => x.inventory.GetItemCountEffective(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_Sword) > 0 || x.inventory.GetItemCountEffective(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_SwordUnleashed) > 0);
                         if (hasSword && !self.name.StartsWith("BrotherHurt")) return isHeretic ? seeSwordHeretic : seeSword;
                         return orig;
                     });
@@ -320,7 +387,7 @@ namespace ConsistentStageFeatures
                     c.EmitDelegate<Func<SpeechInfo[], BrotherSpeechDriver, SpeechInfo[]>>((orig, self) =>
                     {
                         bool isHeretic = CharacterBody.readOnlyInstancesList.Any(x => x.bodyIndex == BrotherSpeechDriver.hereticBodyIndex);
-                        bool hasSword = CharacterBody.readOnlyInstancesList.Any(x => x.inventory.GetItemCount(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_Sword) > 0 || x.inventory.GetItemCount(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_SwordUnleashed) > 0);
+                        bool hasSword = CharacterBody.readOnlyInstancesList.Any(x => x.inventory.GetItemCountEffective(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_Sword) > 0 || x.inventory.GetItemCountEffective(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_SwordUnleashed) > 0);
                         if (isHeretic) return orig;
                         if (hasSword) return self.name.StartsWith("BrotherHurt") ? killSwordHurt : killSword;
                         return orig;
@@ -332,7 +399,7 @@ namespace ConsistentStageFeatures
                     orig(self);
                     if (SceneCatalog.mostRecentSceneDef.cachedName.StartsWith("moon"))
                     {
-                        bool hasSword = CharacterBody.readOnlyInstancesList.Any(x => x.inventory.GetItemCount(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_Sword) > 0 || x.inventory.GetItemCount(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_SwordUnleashed) > 0);
+                        bool hasSword = CharacterBody.readOnlyInstancesList.Any(x => x.inventory.GetItemCountEffective(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_Sword) > 0 || x.inventory.GetItemCountEffective(BulwarksHaunt.BulwarksHauntContent.Items.BulwarksHaunt_SwordUnleashed) > 0);
                         pissed |= hasSword;
                         if (!pissed) return;
                         foreach (var member in self.combatSquad.membersList)
@@ -414,7 +481,6 @@ namespace ConsistentStageFeatures
                     }, Run.instance.stageRng));
             };
             // Stage 10 - Vanilla (Primordial Teleporter)
-
             if (GoldShrineCost.Value != 200) LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/Shrines/ShrineGoldshoresAccess").GetComponent<PurchaseInteraction>().cost = 100;
             if (GoldenCoastChests.Value < 4) Stage.onStageStartGlobal += stage =>
             {
@@ -494,7 +560,6 @@ namespace ConsistentStageFeatures
                 if (skeleton != null)
                 {
                     GameObjectUnlockableFilter filter = skeleton.GetComponent<GameObjectUnlockableFilter>();
-                    filter.forbiddenUnlockable = "";
                     filter.forbiddenUnlockableDef = null;
                     filter.Networkactive = true;
                     filter.active = true;
@@ -505,7 +570,7 @@ namespace ConsistentStageFeatures
             GlobalEventManager.onCharacterDeathGlobal += (report) =>
             {
                 if (report?.victimBody?.name == "AltarSkeletonBody")
-                    PickupDropletController.CreatePickupDroplet(Run.instance.treasureRng.NextElementUniform(Run.instance.availableVoidTier2DropList), report.victimBody.corePosition, new Vector3(-15f, 13f, -20f));
+                    PickupDropletController.CreatePickupDroplet(new UniquePickup() { pickupIndex = Run.instance.treasureRng.NextElementUniform(Run.instance.availableVoidTier2DropList) }, report.victimBody.corePosition, new Vector3(-15f, 13f, -20f), false);
             };
         }
 
@@ -564,7 +629,7 @@ namespace ConsistentStageFeatures
                         if (equips.Count > 0) hankSelection.AddChoice(new() { value = equips, weight = 0.5f });
                         if (hankSelection.Count == 0) return;
                         PickupIndex ret = Run.instance.treasureRng.NextElementUniform(hankSelection.Evaluate(Run.instance.treasureRng.nextNormalizedFloat));
-                        PickupDropletController.CreatePickupDroplet(ret, self.gameObject.transform.position + Vector3.up * 1.5f, Vector3.up * 5f + self.gameObject.transform.forward * 20f);
+                        PickupDropletController.CreatePickupDroplet(new UniquePickup() { pickupIndex = ret }, self.gameObject.transform.position + Vector3.up * 1.5f, Vector3.up * 5f + self.gameObject.transform.forward * 20f, false);
                     }
                 };
             }
@@ -572,9 +637,12 @@ namespace ConsistentStageFeatures
 
         public static void HandleShrineOfRepair()
         {
-            InteractableSpawnCard isc = ShrineOfRepair.Modules.ShrineOfRepairConfigManager.UsePickupPickerPanel.Value ? ShrineOfRepair.Modules.Interactables.ShrineOfRepairPicker.shrineSpawnCard : ShrineOfRepair.Modules.Interactables.ShrineOfRepairPurchase.shrineSpawnCard;
-            if (ShrineRepairOnStage5.Value) SpawnRandomly(5, isc, true);
-            if (RemoveRandomShrineRepair.Value) isc.maxSpawnsPerStage = 0;
+            RoR2Application.onLoad += () =>
+            {
+                InteractableSpawnCard isc = ShrineOfRepair.ShrineOfRepairStuff.normalShrineSpawnCard;
+                if (ShrineRepairOnStage5.Value) SpawnRandomly(5, isc, true);
+                if (RemoveRandomShrineRepair.Value) isc.maxSpawnsPerStage = 0;
+            };
         }
 
         public static void FHRadarScannerPatch()

@@ -3,7 +3,9 @@
 
 This mod guarantees specific interactables in various stages (like AWU) that you can take advantage of as a form of mitigating RNG using game knowledge. Every element is configurable.
 
-Entry listed as **Default Off** must be turned on through config to enable, and Entry listed as **Other Mod** is quite literally what other mod does; It is merely there to explain the other changes this mod makes and to recommend if you want more stage features. Keep in mind that **only the ones not tagged "other mod" is part of CSF**. The following is a collection of all stage features in the modding environment at the moment.
+Entry listed as **Default Off** must be turned on through config to enable.
+
+, and Entry listed as **Other Mod** is quite literally what other mod does; It is merely there to explain the other changes this mod makes and to recommend if you want more stage features. Keep in mind that **only the ones not tagged "other mod" is part of CSF**. The following is a collection of all stage features in the modding environment at the moment.
 
 ## General
 - Time Scale Config: Enable/Disables run time flow per stage. By default, [Forgotten Haven](https://thunderstore.io/package/PlasmaCore3/Forgotten_Relics/) gets timestop disabled.
@@ -29,6 +31,10 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224154037_1.jpg)
 - **Default Off:** Military Printer in Siphoned Forest.
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224154108_1.jpg)
+- **Default Off:** 3 Printers in Viscous Falls.
+![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20251218034357_1.jpg)
+- **Default Off:** Drone Assembly Station* in Shattered Abodes.
+![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20251218034435_1.jpg)
 
 </p>
 </details>
@@ -42,12 +48,12 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 
 - **Default Off:** Pressure plates will stay put in Abandoned Aqueduct.
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224154555_1.jpg)
-- Destroying N'kuhana's Altar rewards you with a Void Uncommon item
+- Destroying N'kuhana's Altar rewards you with a Void Uncommon item.
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224154752_1.jpg)
-- **Other Mod** [KannasQualityofLife](https://thunderstore.io/package/SylmarDev/KannasQualityofLife/): Cleansing Pool spawns at **fixed** location in Aphelian Sanctuary
-![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224155231_1.jpg)
-- **Other Mod** [Forgotten Relics](https://thunderstore.io/package/PlasmaCore3/Forgotten_Relics/): Shrine of Tar spawns at **random** location in Dry Basin
-![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224155358_1.jpg)
+- Three [Shrines of Sacrifice](https://thunderstore.io/package/SandsweptTeam/Sandswept/) in Pretender's Precipice.
+![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20251218035912_1.jpg)
+- [Shrine of the Future](https://thunderstore.io/package/SandsweptTeam/Sandswept/) in Reformed Altar.
+![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20251218034634_1.jpg)
 
 </p>
 </details>
@@ -59,15 +65,15 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 - Guaranteed Altar of Gold: At least one Altar of Gold will always spawn in a **random** location. Ability to turn off natural spawn is also configurable.
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224230949_1.jpg)
 
-- **Other Mod** [BetterDrones](https://thunderstore.io/package/pseudopulse/BetterDrones/): TC-280 Prototype spawns at **fixed** location in Rallypoint Delta.
-![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224163623_1.jpg)
-- **Other Mod** [Mystic's Items](https://thunderstore.io/package/TheMysticSword/MysticsItems/): Archaic Mask spawns at **fixed** location in Scorched Acres
-![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224163730_1.jpg)
+- Two bombardment drones in Rallypoint Delta.
+![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20251218034634_1.jpg)
 - Cloaked Chest will spawn at **fixed** location in Sulfur Pools, as well as two Lockboxes (indirect buff to Rusted Key)
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224163917_1.jpg)
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224163845_1.jpg)
-- **Other Mod** [Fogbound Lagoon](https://thunderstore.io/package/JaceDaDorito/FogboundLagoon/): Adds a timed chest.
-![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224163526_1.jpg)
+- [Shrine of Ruin](https://thunderstore.io/package/SandsweptTeam/Sandswept/) in Iron Alluvium.
+![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20251218040326_1.jpg)
+- Temporary item dispensers at Treeborn Colony.
+![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20251218034807_1.jpg)
 - Interacting with Hank from [Fogbound Lagoon](https://thunderstore.io/package/JaceDaDorito/FogboundLagoon/) results in a random drink.
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224163440_1.jpg)
 
@@ -82,12 +88,8 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224230507_1.jpg)
 - Shrine of the Mountain will spawn at **fixed** location in Siren's Call.
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224230337_1.jpg)
-- **Other Mod** [Direseeker](https://thunderstore.io/package/EnforcerGang/Direseeker/): Replaces the legendary chest with Direseeker, an AWU-tier boss.
-![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224164000_1.jpg)
-- **Other Mod** [Fetch a Friend Quest](https://thunderstore.io/package/RandomlyAwesome/Fetch_a_friend_Quest/): Rescueing REX adds it to your team.
-![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224164140_1.jpg)
-- **Other Mod** [Mystic's Items](https://thunderstore.io/package/TheMysticSword/MysticsItems/): Spotter Drone spawns at Sundered Grove.
-![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224164104_1.jpg)
+- Two Drone Combine Stations will spawn at **fixed** location in Repurposed Crater.
+![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20251218041157_1.jpg)
 
 </p>
 </details>
@@ -114,8 +116,6 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 <details><summary>Details w/ Screenshot (Spoilers!)</summary>
 <p>
 
-- **Other Mod** [Shrine of Repair](https://thunderstore.io/package/viliger/ShrineOfRepair/): Shrine of Repair will spawn at **fixed** location.
-![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224164851_1.jpg)
 - **Default Off:** Scrapper will spawn at **fixed** location.
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224164858_1.jpg)
 - When [Crystalline Blade](https://thunderstore.io/package/TheMysticSword/BulwarksHaunt/) is equipped, Mithrix will be 20% faster (configurable health, damage, attack speed, movement speed, armor) and has custom dialogue. Defeating the buffed Mithrix will reward extra Lunar Coins.
@@ -141,7 +141,7 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 <details><summary>Details w/ Screenshot (Spoilers!)</summary>
 <p>
 
-- Altar of Gold's Base cost is halved and configurable.
+- Altar of Gold's Base cost is 4 chests and configurable.
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224165439_1.jpg)
 - Combat and Blood Shrines will spawn at **fixed** position in Gilded Coast.
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224165609_1.jpg)
@@ -150,12 +150,6 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230304161548_1.jpg)
 - Whenever you purchase a Radio Scanner or deposit a Fuel Cell, Radar Scanner's effect will trigger in [Forgotten Haven](https://thunderstore.io/package/PlasmaCore3/Forgotten_Relics/).
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224165949_1.jpg)
-- **Other Mod** [KannasQualityofLife](https://thunderstore.io/package/SylmarDev/KannasQualityofLife/): Scrapper will spawn at **fixed** position in Bazaar Between Time.
-![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224170224_1.jpg)
-- **Other Mod**  [Shrine of Repair](https://thunderstore.io/package/viliger/ShrineOfRepair/): Shrine of Repair will spawn at **fixed** position in Bazaar Between Time.
-![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224170737_1.jpg)
-- **Other Mod**  [Dancer](https://thunderstore.io/package/nayDPz/Dancer/): Rescueing Artificer adds it to your team. 
-![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224170724_1.jpg)
 - Shrine of the Woods will spawn at **fixed** position in [A Moment, Haunted](https://thunderstore.io/package/TheMysticSword/BulwarksHaunt/).
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224170025_1.jpg)
 - Void Fields will no longer contain any loot.
@@ -164,7 +158,28 @@ Entry listed as **Default Off** must be turned on through config to enable, and 
 </p>
 </details>
 
+## Other Mods
+ConsistentStageFeatures skips on some stages because there are other mods that adds consistent stage features. These are the mods that we recognize / recommend:
+- [LimitedInteractables](https://thunderstore.io/package/prodzpod/LimitedInteractables/): Makes Drone Assembly Stations upright to differentiate it from Combine Stations.
+- [KannasQualityofLife](https://thunderstore.io/package/SylmarDev/KannasQualityofLife/): the precursor of CSF, Cleansing Pool spawns at **fixed** location in Aphelian Sanctuary.
+- [SwampMiniboss](https://thunderstore.io/package/public_ParticleSystem/SwampMiniboss/): Alternative for CSF's Wetland, replaces the skeleton with a "boss".
+- [Forgotten Relics](https://thunderstore.io/package/PlasmaCore3/Forgotten_Relics/): Shrine of Tar spawns at **random** location in Dry Basin.
+- [Catacombs](https://thunderstore.io/package/viliger/Catacombs/): "The Easter Egg"
+- [Mystic's Items](https://thunderstore.io/package/TheMysticSword/MysticsItems/): Archaic Mask spawns at **fixed** location in Scorched Acres.
+- [Fogbound Lagoon](https://thunderstore.io/package/JaceDaDorito/FogboundLagoon/): Adds a timed chest.
+- [Direseeker](https://thunderstore.io/package/EnforcerGang/Direseeker/): Replaces the legendary chest at Abyssal Depths with Direseeker, an AWU-tier boss.
+- [Fetch a Friend Quest](https://thunderstore.io/package/RandomlyAwesome/Fetch_a_friend_Quest/): Rescueing REX adds it to your team.
+- [Mystic's Items](https://thunderstore.io/package/TheMysticSword/MysticsItems/): Spotter Drone spawns at Sundered Grove.
+- [RepurposedCraterBoss](https://thunderstore.io/package/Risky_Sleeps/RepurposedCraterBoss/): Replaces the legendary chest at Repurposed Crater with Alloy Hunter.
+- [Shrine of Repair](https://thunderstore.io/package/viliger/ShrineOfRepair/): Shrine of Repair will spawn at **fixed** location in the moon.
+- [KannasQualityofLife](https://thunderstore.io/package/SylmarDev/KannasQualityofLife/): Scrapper will spawn at **fixed** position in Bazaar Between Time.
+- [Shrine of Repair](https://thunderstore.io/package/viliger/ShrineOfRepair/): Shrine of Repair will spawn at **fixed** position in Bazaar Between Time.
+- [Dancer](https://thunderstore.io/package/nayDPz/Dancer/): Rescueing Artificer adds it to your team. 
+- [CollectiveRewiring](https://thunderstore.io/package/pseudopulse/CollectiveRewiring/): CHEF will spawn at **fixed** position in the moon, Prime Meridian, Void Locus as well.
+- [ChefBazaar](https://thunderstore.io/package/acanthic/ChefBazaar/): CHEF has a **random** chance to spawn in Bazaar Between Time.
+
 ## Changelog
+- 1.3.0: made to work with AC & added SOTS/AC stages support
 - 1.2.4: updated description???
 - 1.2.3: removed umbralmithrix compat as obelisk is gone
 - 1.2.2: Spicy/Illegal hank config, slightly nerfed hank (weighted chance based on tier)
