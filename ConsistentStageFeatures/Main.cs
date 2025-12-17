@@ -10,8 +10,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using RoR2.Navigation;
 using UnityEngine.AddressableAssets;
-using EntityStates;
-using EntityStates.BrotherMonster;
 using RoR2.EntityLogic;
 using MonoMod.Cil;
 using RoR2.CharacterSpeech;
@@ -36,7 +34,7 @@ namespace ConsistentStageFeatures
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "ConsistentStageFeatures";
-        public const string PluginVersion = "1.3.0";
+        public const string PluginVersion = "1.4.0";
         public const string softdepAetherium = "com.KomradeSpectre.Aetherium";
         public const string softdepBulwarksHaunt = "com.themysticsword.bulwarkshaunt";
         public const string softdepFogboundLagoon = "JaceDaDorito.FBLStage";
@@ -84,7 +82,9 @@ namespace ConsistentStageFeatures
         public static ConfigEntry<bool> SageShrineOnMeadow;
         public static ConfigEntry<bool> SageShrineOnSatellite;
         public static ConfigEntry<bool> RemoveRandomSageShrine;
+        public static ConfigEntry<bool> ChallengeShrineInReef;
         public static ConfigEntry<bool> BulwarkSwordOnSatellite;
+        public static ConfigEntry<bool> BulwarkSwordOnReef;
         public static ConfigEntry<bool> ScrapperOnMoon;
         public static ConfigEntry<bool> RemoveRandomScrapper;
         public static ConfigEntry<bool> ObeliskOnMoon1;
@@ -154,7 +154,9 @@ namespace ConsistentStageFeatures
             SageShrineOnMeadow = Config.Bind("Stage 5", "Sage`s Shrine on Sky Meadow", false, "shmrez is weird fr fr");
             SageShrineOnSatellite = Config.Bind("Stage 5", "Sage`s Shrine on Slumbering Satellite", true, "makes it fixed");
             RemoveRandomSageShrine = Config.Bind("Stage 5", "Remove Random Sage`s Shrine Spawns", true, "only the fixed spawn exists");
+            ChallengeShrineInReef = Config.Bind("Stage 5", "Extra Challenge Shrines on Sunken Tombs", true, "plugging myself is so easy");
             BulwarkSwordOnSatellite = Config.Bind("Stage 5", "Bulwark Sword on Slumbering Satellite", true, "haunted is no longer rng");
+            BulwarkSwordOnReef = Config.Bind("Stage 5", "Bulwark Sword on Desolate Sunken Tombs", true, "haunted is no still rng actually because there is a broken sword in helminth");
 
             ScrapperOnMoon = Config.Bind("Commencement", "Scrapper on Moon", false, "Scrapper on the Moon. Use it if you have scrappers rebalanced.");
             RemoveRandomScrapper = Config.Bind("Commencement", "Remove Random Scrapper Spawns", false, "only the fixed spawn exists");
@@ -272,7 +274,7 @@ namespace ConsistentStageFeatures
             }
 
             // Scorched Acres - Mystic's Items (ancient mask)
-            if (ShrineRuinOnAlluvium.Value) sandsweep3();
+            if (ShrineRuinOnAlluvium.Value && Mods(softdepSandswept)) sandsweep3();
             void sandsweep3()
             {
                 SpawnGuaranteed("ironalluvium", Sandswept.Interactables.Regular.ShrineOfRuin.Instance.interactableSpawnCard, new Vector3(208.9976f, 151.4559f, 12.1333f), new Vector3(309.2588f, 251.1624f, 284.5793f));
@@ -330,6 +332,16 @@ namespace ConsistentStageFeatures
                 //0
                 Stage.onStageStartGlobal += stage => { if (stage.sceneDef.cachedName == "slumberingsatellite") GameObject.Find("World").transform.Find("Gated Areas").Find("GateGround0").gameObject.SetActive(true); };
             };
+            if (ChallengeShrineInReef.Value && Mods("com.groovesalad.DesolateReef", "com.themysticsword.extrachallengeshrines")) checkShrines();
+            void checkShrines()
+            {
+                RoR2Application.onLoad += () =>
+                {
+                    SpawnGuaranteed("voidstage", ExtraChallengeShrines.Interactables.ShrineCrown.spawnCard, new(-222.1664f, 39.7891f, 52.2902f));
+                    SpawnGuaranteed("voidstage", ExtraChallengeShrines.Interactables.ShrineEye.spawnCard, new(-228.3628f, 39.7893f, 73.1713f), new(0, 302.7731f, 0));
+                    SpawnGuaranteed("voidstage", ExtraChallengeShrines.Interactables.ShrineRock.spawnCard, new(-208.5046f, 40.0891f, 80.1995f));
+                };
+            }
             if (Mods(softdepForgottenRelics, softdepBulwarksHaunt)) checkBulwark();
             void checkBulwark()
             {
@@ -342,6 +354,11 @@ namespace ConsistentStageFeatures
                     GameObject.Find("World").transform.Find("Gated Areas").Find("GateGround5").gameObject.SetActive(true);
                 }
             }; };
+            if (Mods("com.groovesalad.DesolateReef", softdepBulwarksHaunt) && BulwarkSwordOnSatellite.Value) checkBulwark2();
+            void checkBulwark2()
+            {
+                if (BulwarkSwordOnSatellite.Value) SpawnGuaranteed("voidstage", BulwarksHaunt.Items.Sword.swordObjPrefab, new Vector3(-36.08f, 95.8711f, -55.5216f), new Vector3(337.4228f, 194.8307f, 0));
+            }
             // Solutional Haunt - TC280, Prison Matrix
             // Helminth Hatchery - Sorry sword is broken here
             if (ScrapperOnMoon.Value)

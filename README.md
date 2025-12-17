@@ -105,9 +105,11 @@ Entry listed as **Default Off** must be turned on through config to enable.
 - **Default Off:** Sages' Shrine will spawn at **fixed** location in Sky Meadow.
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224230556_1.jpg)
 - Sages' Shrine will spawn at **fixed** location in [Slumbering Satellite](https://thunderstore.io/package/PlasmaCore3/Forgotten_Relics/). **Sages' Shrines will no longer spawn randomly by default.**
-![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224164601_1.jpg)
+- All [Extra Challenge Shrines](https://thunderstore.io/package/prodzpod/RealerExtraChallengeShrines/) will spawn at **fixed** location in [Sunken Tombs](https://thunderstore.io/package/prodzpod/SunkenTombs/).
+![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20251218054757_1.jpg)
 - [Crystalline Blade](https://thunderstore.io/package/TheMysticSword/BulwarksHaunt/) will spawn at **fixed** location in [Slumbering Satellite](https://thunderstore.io/package/PlasmaCore3/Forgotten_Relics/).
 ![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20230224164452_1.jpg)
+![Image](https://raw.githubusercontent.com/prodzpod/ConsistentStageFeatures/master/20251218054705_1.jpg)
 
 </p>
 </details>
@@ -179,6 +181,7 @@ ConsistentStageFeatures skips on some stages because there are other mods that a
 - [ChefBazaar](https://thunderstore.io/package/acanthic/ChefBazaar/): CHEF has a **random** chance to spawn in Bazaar Between Time.
 
 ## Changelog
+- 1.4.0: sunkentombs support
 - 1.3.0: made to work with AC & added SOTS/AC stages support
 - 1.2.4: updated description???
 - 1.2.3: removed umbralmithrix compat as obelisk is gone
